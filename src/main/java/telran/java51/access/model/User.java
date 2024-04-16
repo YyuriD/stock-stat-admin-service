@@ -23,4 +23,6 @@ public class User implements Serializable {
 	String email;
 	@Setter
 	String password;
+	
+	//TODO roles
 }

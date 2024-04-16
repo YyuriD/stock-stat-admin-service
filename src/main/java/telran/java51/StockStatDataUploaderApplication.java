@@ -34,14 +34,13 @@ public class StockStatDataUploaderApplication implements CommandLineRunner {
 				if (accessServiceImpl.checkAccess(email, password)) {
 					System.out.println("enter file name ");
 					String fileName = consolReader.readLine();
-					//TODO
+					//TODO download csv file
 				} else {
 					System.out.println(" Try again? Y/N");
-					if("N".equals(consolReader.readLine())) {
+					if("N".equalsIgnoreCase(consolReader.readLine())) {
 						break;
 					}
-				}
-				
+				}			
 			}
 		} catch (Exception e) {
 			//
