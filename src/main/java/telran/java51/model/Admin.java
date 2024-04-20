@@ -23,6 +23,7 @@ public class Admin implements Serializable {
 
 	@Id
 	String login;
+	
 	@Setter
 	String password;
 
