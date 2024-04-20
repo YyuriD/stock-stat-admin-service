@@ -1,0 +1,12 @@
+package telran.java51;
+
+public enum Menu {
+	START,
+	CHECK_ACCESS,
+	CHOICE_ACTION,
+	ADD_ADMIN,
+	UPDATE_ADMIN,
+	DELETE_ADMIN,
+	UPLOAD_CSV,
+	EXIT
+}
