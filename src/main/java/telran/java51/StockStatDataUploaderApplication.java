@@ -56,7 +56,7 @@ public class StockStatDataUploaderApplication implements CommandLineRunner {
 			while (true) {
 				switch (menuStep) {
 				case START:
-					System.out.println("<<< Welcome >>>");
+					System.out.println("<<< Welcome to admin service >>>");
 					
 				case CHECK_ACCESS:
 					currentUser = adminServiceImpl.checkAccess();
