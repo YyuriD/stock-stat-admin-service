@@ -1,0 +1,34 @@
+1713715467567:hello
+1713715492600:help
+1713717107921:login --admin --admin
+1713717283622:help
+1713717315636:login --login admin --password admin
+1713717543479:login -u admin -p admin
+1713717558183:login --u admin --p admin
+1713718438052:add_user --u operator3 --p 1234
+1713718456479:add_user --u operator3 --p 1234 --l 2
+1713721060468:login --u operator1 --p 1234
+1713721330580:login --u operator2 --p 1234
+1713721378351:add-user --u operator4 --p 1234 --l 2
+1713721394625:add_user --u operator4 --p 1234 --l 2
+1713721488078:stacktrace
+1713721720701:add_user --u operator4 --p 1234 --l 2
+1713721732349:stacktrace
+1713722321829:add_user --u operator4 --p 1234 --l 2
+1713723884632:login --u operator1 --p 1234
+1713723944641:add_user --u operator4 --p 1234 --l 2
+1713728729728:help
+1713728799654:exit
+1713728944792:logout
+1713729042652:login --u admin --p admin
+1713729088790:update_user --u operator4 --p 1234 --l 1
+1713729099262:update_user --u operator3 --p 1234 --l 1
+1713729158478:delete_user --u operator4 --p 1234 --l 1
+1713729346284:login --u operator1 --p 1234
+1713729357208:delete_user --u operator4 --p 1234 --l 1
+1713729376437:logout
+1713729387983:login --u admin --p admin
+1713729398217:delete_user --u operator4 --p 1234 --l 1
+1713729421964:delete_user --u operator3 --p 1234 --l 1
+1713729444450:delete_user --u operator3
+1713729464439:logout

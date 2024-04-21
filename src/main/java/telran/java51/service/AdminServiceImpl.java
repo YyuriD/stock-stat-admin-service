@@ -1,7 +1,6 @@
 package telran.java51.service;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.springframework.context.annotation.Configuration;
@@ -19,81 +18,88 @@ public class AdminServiceImpl implements AdminService {
 	final AdminRepository adminRepository;
 	final PasswordEncoder passwordEncoder;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	
+	private Admin currentUser = null;
+
 	@Override
-	public Admin checkAccess() throws IOException {
-		Admin user = null;
-		System.out.println("Enter login");
-		String login = br.readLine();
-		System.out.println("Enter password");
-		String password = br.readLine();
-		user = adminRepository.findById(login).orElse(null);
-		if (user == null) {
-			System.out.println("User does not exist");
-			return null;
+	public String login(String login, String password) {
+		currentUser = adminRepository.findById(login).orElse(null);
+		if (currentUser == null) {
+			return "user not found";
 		}
-		if (!passwordEncoder.matches(password, user.getPassword())) {
-			System.out.println("Wrong password");
-			return null;
+		if (!passwordEncoder.matches(password, currentUser.getPassword())) {
+			return "wrong password";
 		}
-		return user;
+		return "Welcome to admin service";
 	}
 
 	@Override
-	public Boolean registerAdmin() throws IOException {
-		System.out.println("Enter login");
-		String login = br.readLine();
+	public String addUser(String login, String password, String accessLevel) {
+		if (currentUser.getLogin() == null) {
+			return "please login";
+		}
+		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
+			return "access denied";
+		}
 		if (adminRepository.existsById(login)) {
-			System.out.println("User already exist");
-			return false;
+			return "User already exist";
 		}
-		System.out.println("Enter password");
-		String password = passwordEncoder.encode(br.readLine());
-		System.out.println("Enter access Level");
-		Integer accessLevel = Integer.parseInt(br.readLine());
-		Admin admin = new Admin(login, password, accessLevel);
+		password = passwordEncoder.encode(password);
+		Admin admin = new Admin(login, password, Integer.parseInt(accessLevel));
 		if (adminRepository.save(admin) == null) {
-			return false;
+			return "fail";
 		}
-		return true;
+		return "success!";
 	}
 
 	@Override
-	public Boolean updateAdmin() throws IOException {
-		System.out.println("Enter login");
-		String login = br.readLine();
+	public String updateUser(String login, String password, String accessLevel) {
+		if (currentUser.getLogin() == null) {
+			return "please login";
+		}
+		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
+			return "access denied";
+		}
 		if (!adminRepository.existsById(login)) {
-			System.out.println("User does not exist");
-			return false;
+			return "User not found";
 		}
-		System.out.println("Enter password");
-		String password = br.readLine();
-		System.out.println("Enter access Level");
-		Integer accessLevel = Integer.parseInt(br.readLine());
-		Admin admin = new Admin(login, password, accessLevel);
+		Admin admin = new Admin(login, password, Integer.parseInt(accessLevel));
 		if (adminRepository.save(admin) == null) {
-			return false;
+			return "fail";
 		}
-		return true;
+		return "success!";
 	}
 
 	@Override
-	public Boolean deleteAdmin() throws IOException {
-		System.out.println("Enter login");
-		String login = br.readLine();
-		Admin admin = adminRepository.findById(login).orElse(null);
-		if (admin == null) {
-			System.out.println("User does not exist");
-			return false;
+	public String deleteUser(String login) {
+		if (currentUser.getLogin() == null) {
+			return "please login";
 		}
-		adminRepository.delete(admin);
-		return true;
+		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
+			return "access denied";
+		}
+		Admin user = adminRepository.findById(login).orElse(null);
+		if (user == null) {
+			return "user not found";
+		}
+		adminRepository.delete(user);
+		return "success!";
 	}
 
 	@Override
-	public Boolean uploadCsv() {
+	public String uploadCsvToDb() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String downloadCsvfromDb() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public String logout() {
+		currentUser = null;
+		return "Goodbye";
 	}
 
 }

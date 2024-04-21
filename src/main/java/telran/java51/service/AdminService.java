@@ -1,18 +1,18 @@
 package telran.java51.service;
 
-import java.io.IOException;
-
-import telran.java51.model.Admin;
-
 public interface AdminService {
-	Admin checkAccess() throws IOException;
+	String login(String login, String password);
 
-	Boolean registerAdmin() throws IOException;
+	String addUser(String login, String password,String accessLevel);
 
-	Boolean updateAdmin() throws IOException;
+	String updateUser(String login, String password, String accessLevel);
 
-	Boolean deleteAdmin() throws IOException;
+	String deleteUser(String login);
 
-	Boolean uploadCsv() throws IOException;
+	String uploadCsvToDb();
+	
+	String downloadCsvfromDb();
+	
+	public String logout();
 
 }
