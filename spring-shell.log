@@ -62,3 +62,5 @@
 1713760091853:login --u operator1 --p 1234
 1713760102086:delete_user --u operator4
 1713760109695:logout
+1713782745312:help
+1713783595326:login --u admin --p admin
