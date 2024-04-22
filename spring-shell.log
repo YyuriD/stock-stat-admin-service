@@ -32,3 +32,33 @@
 1713729421964:delete_user --u operator3 --p 1234 --l 1
 1713729444450:delete_user --u operator3
 1713729464439:logout
+1713733409469:login --u admin --p admin
+1713733423537:add_user --u operator4 --p 1234 --l 2232
+1713733440542:add_user --u operator5 --p 1234 --l 2232
+1713733460489:add_user --u operator4 --p 1234 --l 22
+1713733481743:add_user --u operator5 --p 1234 --l 22
+1713733504525:add_user --u operator5 --p 1234 --l 2
+1713733512770:logout
+1713733516996:exit
+1713733880313:login --u admin --p admin
+1713733894937:add_user --u operator6 --p 1234 --l 26
+1713733916966:[1mstacktrace
+1713733926901:stacktrace
+1713734073160:login --u admin --p admin
+1713734091441:add_user --u operator7 --p 1234 --l 2
+1713734096588:logout
+1713734103442:add_user --u operator8 --p 1234 --l 2
+1713734357762:add_user --u operator7 --p 1234 --l 2
+1713734609482:login --u admin --p admin
+1713734631830:update_user --u operator3 --p 1234 --l 5
+1713734643568:update_user --u operator4 --p 1234 --l 5
+1713734649820:logout
+1713734657219:update_user --u operator4 --p 1234 --l 5
+1713759982186:login --u admin --p admin
+1713760047293:delete_user --u operator5
+1713760053095:delete_user --u operator7
+1713760070978:logout
+1713760076944:delete_user --u operator4
+1713760091853:login --u operator1 --p 1234
+1713760102086:delete_user --u operator4
+1713760109695:logout

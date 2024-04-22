@@ -18,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
 	final AdminRepository adminRepository;
 	final PasswordEncoder passwordEncoder;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private Admin currentUser = null;
+	private Admin currentUser ;
 
 	@Override
 	public String login(String login, String password) {
@@ -28,7 +28,7 @@ public class AdminServiceImpl implements AdminService {
 		}
 		if (!passwordEncoder.matches(password, currentUser.getPassword())) {
 			return "wrong password";
-		}
+		}			
 		return "Welcome to admin service";
 	}
 
@@ -98,7 +98,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	public String logout() {
-		currentUser = null;
+		currentUser.reset();
 		return "Goodbye";
 	}
 
