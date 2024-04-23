@@ -64,3 +64,31 @@
 1713760109695:logout
 1713782745312:help
 1713783595326:login --u admin --p admin
+1713821494999:logout
+1713821507699:login --u admin --p admin
+1713821513065:logout
+1713861496286:login --u admin --p admin
+1713862558221:logout
+1713876670006:login --u admin --p admin
+1713876706042:add_user --u Rubaha_paren --p 1234 --l 2
+1713876730159:stacktrace
+1713876879155:login --u admin --p admin
+1713876892994:add_user --u operator8 --p 1234 --l 2
+1713876915324:add_user --u operator4 --p 1234 --l 1
+1713876936243:add_user --u operator5 --p 1234 --l 2
+1713876994347:login --u admin --p admin
+1713877014346:add_user --u operator5 --p 1234 --l 2
+1713877093360:login --u operator1 --p 1234
+1713877100105:logout
+1713877111602:add_user --u operator4 --p 1234 --l 2
+1713877123796:add_user --u operator9 --p 1234 --l 2
+1713877172811:login --u operator199 --p 1234
+1713877368332:login --u operator1 --p 1234
+1713877373657:login --u operator2 --p 1234
+1713877780693:login --u operator1 --p 1234
+1713877787224:2
+1713877802559:login --u admin --p admin
+1713882364198:login --u admin --p admi
+1713882371063:login --u admin --p admin
+1713882912770:login --u operator1 --p 123
+1713882917901:login --u operator1 --p 1234

@@ -1,18 +1,22 @@
 package telran.java51.service;
 
+import telran.java51.model.Admin;
+
 public interface AdminService {
 	String login(String login, String password);
 
-	String addUser(String login, String password,String accessLevel);
+	Admin findByName(String login);
+	
+	Admin addUser(String login, String password,String accessLevel);
 
-	String updateUser(String login, String password, String accessLevel);
+	Admin updateUser(String login, String password, String accessLevel);
 
-	String deleteUser(String login);
+	Admin deleteUser(String login);
 
 	String uploadCsvToDb();
 	
 	String downloadCsvfromDb();
 	
-	public String logout();
+	public void logout();
 
 }

@@ -3,12 +3,20 @@ package telran.java51.service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import telran.java51.dao.AdminRepository;
+import telran.java51.exceptions.UserExistsException;
+import telran.java51.exceptions.UserNotFoundException;
 import telran.java51.model.Admin;
 
 @Service
@@ -18,71 +26,56 @@ public class AdminServiceImpl implements AdminService {
 	final AdminRepository adminRepository;
 	final PasswordEncoder passwordEncoder;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	private Admin currentUser ;
+	
+	@Autowired
+	AuthenticationManager authenticationManager;
 
 	@Override
 	public String login(String login, String password) {
-		currentUser = adminRepository.findById(login).orElse(null);
-		if (currentUser == null) {
-			return "user not found";
+		try {
+			Authentication result = authenticationManager
+					.authenticate(new UsernamePasswordAuthenticationToken(login, password));
+			SecurityContextHolder.getContext().setAuthentication(result);
+			return "Welcome to admin service";
+		} catch (AuthenticationException e) {
+			System.out.println(e.getMessage());
+			return "Authentication failed";
 		}
-		if (!passwordEncoder.matches(password, currentUser.getPassword())) {
-			return "wrong password";
-		}			
-		return "Welcome to admin service";
 	}
 
 	@Override
-	public String addUser(String login, String password, String accessLevel) {
-		if (currentUser.getLogin() == null) {
-			return "please login";
-		}
-		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
-			return "access denied";
-		}
+	public Admin findByName(String login) {
+		return adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
+	}
+
+	@Override
+	public Admin addUser(String login, String password, String accessLevel) {
 		if (adminRepository.existsById(login)) {
-			return "User already exist";
+			throw new UserExistsException();
 		}
+		// TODO CheckCredentials
+		// TODO WrongCredentialsException
 		password = passwordEncoder.encode(password);
-		Admin admin = new Admin(login, password, Integer.parseInt(accessLevel));
-		if (adminRepository.save(admin) == null) {
-			return "fail";
-		}
-		return "success!";
+		Admin user = new Admin(login, password, Integer.parseInt(accessLevel));
+		return adminRepository.save(user);
 	}
 
 	@Override
-	public String updateUser(String login, String password, String accessLevel) {
-		if (currentUser.getLogin() == null) {
-			return "please login";
-		}
-		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
-			return "access denied";
-		}
-		if (!adminRepository.existsById(login)) {
-			return "User not found";
-		}
-		Admin admin = new Admin(login, password, Integer.parseInt(accessLevel));
-		if (adminRepository.save(admin) == null) {
-			return "fail";
-		}
-		return "success!";
+	public Admin updateUser(String login, String password, String accessLevel) {
+		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
+		// TODO CheckCredentials
+		// TODO WrongCredentialsException
+		password = passwordEncoder.encode(password);
+		user.setPassword(password);
+		user.setAccessLevel(Integer.parseInt(accessLevel));
+		return adminRepository.save(user);
 	}
 
 	@Override
-	public String deleteUser(String login) {
-		if (currentUser.getLogin() == null) {
-			return "please login";
-		}
-		if (currentUser.getAccessLevel() < Admin.MAX_ACCESS_LEVEL) {
-			return "access denied";
-		}
-		Admin user = adminRepository.findById(login).orElse(null);
-		if (user == null) {
-			return "user not found";
-		}
+	public Admin deleteUser(String login) {
+		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
 		adminRepository.delete(user);
-		return "success!";
+		return user;
 	}
 
 	@Override
@@ -96,10 +89,9 @@ public class AdminServiceImpl implements AdminService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	public String logout() {
-		currentUser.reset();
-		return "Goodbye";
+
+	public void logout() {
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 
 }

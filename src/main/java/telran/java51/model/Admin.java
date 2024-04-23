@@ -2,7 +2,7 @@ package telran.java51.model;
 
 import java.io.Serializable;
 
-import org.springframework.stereotype.Component;
+import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,30 +21,25 @@ import lombok.ToString;
 @EqualsAndHashCode(of = "login")
 @Entity
 @Table(name = "admins")
-@ToString
-@Component
 public class Admin implements Serializable {
 
 	private static final long serialVersionUID = -5760645207196036647L;
 	
 	public static final Integer MIN_ACCESS_LEVEL = 1;
 	public static final Integer MAX_ACCESS_LEVEL = 10;
-
+	
+	
 	@Id
+	@Length(min = 3, message = "The login must be at least 3 characters")
+    @Length(max = 30, message = "The password must be less than 10 characters")
 	String login;
 	
 	@Setter
 	String password;
 
 	@Setter
-	@Min(1) //TODO MIN_ACCESS_LEVEL
-	@Max(10) //TODO MAX_ACCESS_LEVEL
+	@Min(value = 1, message = "The min accessLevel must be 1") 
+	@Max(value = 10, message = "The max accessLevel must be 10")
 	Integer accessLevel;
 	
-	public void reset() {
-		this.login=null;
-		this.password=null;
-		this.accessLevel=0;
-	}
-
 }
