@@ -1,7 +1,11 @@
 package telran.java51.security;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,13 +33,12 @@ public class AdminDetailsServiceImpl implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("User not found.");
 		}
-//		List<String> authorities = Arrays.asList(user.getAccessLevel().toString()); //variant 1
-//		authorities.toString();
-//		return new User(user.getLogin(), user.getPassword(), AuthorityUtils.createAuthorityList(authorities));
+		List<String> authorities = Arrays.asList("ROLE_" + user.getAccessLevel().toString()); //variant 1
+		return new User(user.getLogin(), user.getPassword(), AuthorityUtils.createAuthorityList(authorities));
 
-		User.UserBuilder builder = User.withUsername(login); //variant 2
-		builder.password(user.getPassword());
-		builder.roles(user.getAccessLevel().toString());		
-		return builder.build();
+//		User.UserBuilder builder = User.withUsername(login); //variant 2
+//		builder.password(user.getPassword());
+//		builder.roles(user.getAccessLevel().toString());		
+//		return builder.build();
 	}
 }

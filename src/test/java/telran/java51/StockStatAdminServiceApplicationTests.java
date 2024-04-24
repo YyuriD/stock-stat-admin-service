@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class StockStatDataUploaderApplicationTests {
+class StockStatAdminServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

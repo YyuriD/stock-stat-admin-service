@@ -36,6 +36,7 @@ public class ServiceConfiguration {
 		ProviderManager authenticationManager = new ProviderManager(Arrays.asList(authenticationProvider));
         return authenticationManager;
 	}
-	
+
+   
 
 }

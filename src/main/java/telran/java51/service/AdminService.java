@@ -17,6 +17,4 @@ public interface AdminService {
 	
 	String downloadCsvfromDb();
 	
-	public void logout();
-
 }

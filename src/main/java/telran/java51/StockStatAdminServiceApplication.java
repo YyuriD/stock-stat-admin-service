@@ -11,7 +11,7 @@ import telran.java51.model.Admin;
 import telran.java51.service.AdminServiceImpl;
 
 @SpringBootApplication
-public class StockStatDataUploaderApplication implements CommandLineRunner {
+public class StockStatAdminServiceApplication implements CommandLineRunner {
 
 	@Autowired
 	AdminServiceImpl adminServiceImpl;
@@ -21,7 +21,7 @@ public class StockStatDataUploaderApplication implements CommandLineRunner {
 	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
-		SpringApplication.run(StockStatDataUploaderApplication.class, args);
+		SpringApplication.run(StockStatAdminServiceApplication.class, args);
 	}
 
 	@Override
