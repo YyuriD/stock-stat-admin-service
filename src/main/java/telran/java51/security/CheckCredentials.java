@@ -4,6 +4,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CheckCredentials {
-	// TODO checking login, pass, access level if not correct - throw exception?
+	// TODO checking login, pass, access level if not correct - throw exception BadCredentialsException?
 	
 }
