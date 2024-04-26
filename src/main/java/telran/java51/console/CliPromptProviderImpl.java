@@ -3,7 +3,6 @@ package telran.java51.console;
 import java.util.Set;
 
 import org.jline.utils.AttributedString;
-import org.jline.utils.AttributedStyle;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,7 +32,6 @@ public class CliPromptProviderImpl implements PromptProvider {
 				prompt = promptBuilder(USER_SIGN, userName);
 			}
 		}
-		AttributedStyle.BOLD.bold();
 		return new AttributedString(prompt);
 	}
 
