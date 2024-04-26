@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +19,7 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import telran.java51.exceptions.UserExistsException;
@@ -31,31 +31,33 @@ import telran.java51.service.AdminServiceImpl;
 @ShellComponent
 public class CliCommands {
 
+	private static final String GREETING_MESSAGE = "\nType 'help' for help.\n";
+	private boolean isAuthenticated = false;
 	private static final int MIN_LOGIN_LENGTH = 4;
 	private static final int MAX_LOGIN_LENGTH = 30;
 	private static final int MIN_PASS_LENGTH = 4;
 	private static final int MAX_PASS_LENGTH = 20;
 	private static final int MIN_ACCESS_LEVEL = 1;
 	private static final int MAX_ACCESS_LEVEL = 10;
-	private boolean isAuthenticated = false;
-	
-	
+
 	@Autowired
 	AdminServiceImpl adminServiceImpl;
 	@Autowired
 	AuthenticationManager authenticationManager;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	@Bean
-	@ShellMethod(value = "greeting") // TODO hide in help
-	String greeting() {
-		String message = "\nType 'help' for help.\n";
-		System.out.println(message);
-		return message;
+	@PostConstruct
+	private void greeting() {
+		System.out.println(GREETING_MESSAGE);
+		System.out.println(loginExec());
 	}
 
-	@ShellMethod(key = "login", value = "login to admin service")
+	@ShellMethod(key = "login", value = "login to admin service", prefix = "-")
 	String login() {
+		return loginExec();
+	}
+
+	private String loginExec() {
 		String login = "";
 		String password = "";
 		String message = "";
@@ -88,7 +90,7 @@ public class CliCommands {
 		return message;
 	}
 
-	@ShellMethod(key = "add_user", value = "add user to admin service( --u username --p password --l access level)")
+	@ShellMethod(key = "add_user", value = "add user to admin service( -u username -p password -l access level)", prefix = "-")
 	public String addUser(
 			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login,
 			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
@@ -101,7 +103,7 @@ public class CliCommands {
 		}
 	}
 
-	@ShellMethod(key = "update_user", value = "update exist user(--u username --p password --l access level)")
+	@ShellMethod(key = "update_user", value = "update exist user(-u username -p password -l access level)", prefix = "-")
 	public String updateUser(
 			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login,
 			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
@@ -114,7 +116,7 @@ public class CliCommands {
 		}
 	}
 
-	@ShellMethod(key = "delete_user", value = "delete user")
+	@ShellMethod(key = "delete_user", value = "delete user", prefix = "-")
 	public String deleteUser(
 			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login) {
 		try {
@@ -138,7 +140,8 @@ public class CliCommands {
 		if (authentication == null) {
 			return Availability.unavailable("Must by authorized");
 		}
-		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());//TODO not work without set?
+		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
+																								// set?
 		if (!set.contains("ROLE_" + Admin.MAX_ACCESS_LEVEL)) {
 			return Availability.unavailable("User access level must by " + MAX_ACCESS_LEVEL);
 		}
