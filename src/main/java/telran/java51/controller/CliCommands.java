@@ -37,8 +37,9 @@ public class CliCommands {
 	private static final int MAX_PASS_LENGTH = 20;
 	private static final int MIN_ACCESS_LEVEL = 1;
 	private static final int MAX_ACCESS_LEVEL = 10;
-	private boolean isAuthorized = false;
-
+	private boolean isAuthenticated = false;
+	
+	
 	@Autowired
 	AdminServiceImpl adminServiceImpl;
 	@Autowired
@@ -46,7 +47,7 @@ public class CliCommands {
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	@Bean
-	@ShellMethod(value = "greeting") // TODO hide from help
+	@ShellMethod(value = "greeting") // TODO hide in help
 	String greeting() {
 		String message = "\nType 'help' for help.\n";
 		System.out.println(message);
@@ -78,12 +79,12 @@ public class CliCommands {
 				Authentication result = authenticationManager
 						.authenticate(new UsernamePasswordAuthenticationToken(login, password));
 				SecurityContextHolder.getContext().setAuthentication(result);
-				isAuthorized = true;
+				isAuthenticated = true;
 				message = "Welcome to admin service!";
 			} catch (AuthenticationException e) {
 				System.out.println("Authentication failed");
 			}
-		} while (!isAuthorized);
+		} while (!isAuthenticated);
 		return message;
 	}
 
@@ -128,7 +129,7 @@ public class CliCommands {
 	@ShellMethod(key = "logout", value = "logout from admin service")
 	public String logout() {
 		SecurityContextHolder.getContext().setAuthentication(null);
-		return "Goodbye!";
+		return "Goodbye!\n";
 	}
 
 	@ShellMethodAvailability({ "add_user", "update_user", "delete_user" })
@@ -137,8 +138,7 @@ public class CliCommands {
 		if (authentication == null) {
 			return Availability.unavailable("Must by authorized");
 		}
-		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
-		// set?
+		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());//TODO not work without set?
 		if (!set.contains("ROLE_" + Admin.MAX_ACCESS_LEVEL)) {
 			return Availability.unavailable("User access level must by " + MAX_ACCESS_LEVEL);
 		}
