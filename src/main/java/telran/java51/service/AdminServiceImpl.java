@@ -22,8 +22,7 @@ public class AdminServiceImpl implements AdminService {
 	final AdminRepository adminRepository;
 	final PasswordEncoder passwordEncoder;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	
-	
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 

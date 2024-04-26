@@ -114,3 +114,53 @@
 1713983392620:login
 1713983419973:logout
 1713983564554:login
+1714101559330:delete_user -u operator4
+1714102326974:login
+1714102374075:add_user --u op --p 1234 --l 2
+1714102441603:admin
+1714102450420:login
+1714102468238:add_user --u op --p 1234 --l 2
+1714104769925:operator4
+1714104785920:login
+1714104820616:logout
+1714104824426:login
+1714104882117:delete_user --u operator4
+1714105156063:operator1
+1714105160881:login
+1714105185613:delete_user --u operator2
+1714105354859:login
+1714105432807:add_user
+1714105455054:login
+1714105470208:add_user
+1714105488003:add_user --u operator4 --p 1234 --l 2
+1714105546482:add_user --u ope --p 1234 --l 2
+1714105589410:logout
+1714105593935:login
+1714105625331:add_user --u operator2 --p 1234 --l 2
+1714105779607:add_user --u operator4 --p 1234 --l 2
+1714106001250:login
+1714106031289:add_user --u operator4 --p 1234 --l 2
+1714106078736:add_user --u operator2 --p 1234 --l 2
+1714106090724:add_user --u operator3 --p 1234 --l 2
+1714106383257:login
+1714106414296:update_user --u operator4 --p 1234 --l 1
+1714106835149:operator1
+1714106839443:login
+1714106859514:update_user --u operator4 --p 1234 --l 1
+1714106966730:login
+1714106989308:update_user --u operator4 --p 1234 --l 1
+1714107029316:logout
+1714107097970:login
+1714107522719:update_user --u operator4 --p 1234 --l 1
+1714107545422:logout
+1714107550616:admin
+1714107554975:login
+1714107569181:update_user --u operator4 --p 1234 --l 1
+1714107598457:update_user --u operator4 --p 1234 --l 4
+1714107991894:login
+1714108011549:update_user --u operator45 --p 1234 --l 1
+1714108181261:login
+1714108195487:update_user --u operator4 --p 1234 --l 1
+1714108278141:login
+1714108298302:update_user --u operator4 --p 1234 --l 1
+1714108311225:update_user --u operator48 --p 1234 --l 1
