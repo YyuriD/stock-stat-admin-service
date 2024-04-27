@@ -31,7 +31,6 @@ public class ServiceConfiguration {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService);
 		authenticationProvider.setPasswordEncoder(passwordEncoder);
-	
 		
 		ProviderManager authenticationManager = new ProviderManager(Arrays.asList(authenticationProvider));
         return authenticationManager;

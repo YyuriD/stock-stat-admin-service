@@ -21,4 +21,8 @@ public final class CliUtils {
 		String currentDirectory = Paths.get("").toAbsolutePath().toString();
 		return currentDirectory;
 	}
+	
+	public void parseCsvToStats() {
+		//TODO
+	}
 }

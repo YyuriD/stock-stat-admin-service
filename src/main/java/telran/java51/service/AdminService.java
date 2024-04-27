@@ -13,8 +13,10 @@ public interface AdminService {
 
 	Admin deleteUser(String login);
 
-	String uploadCsvToDb();
+	void uploadDataFromCsv(String filePath);
 	
-	String downloadCsvfromDb();
+	void uploadDataFromService(String filePath);
+	
+	void downloadDataToCsv(String filePath);
 	
 }

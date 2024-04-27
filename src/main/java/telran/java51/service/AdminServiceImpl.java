@@ -76,15 +76,19 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public String uploadCsvToDb() {
+	public void uploadDataFromCsv(String filePath) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
-	public String downloadCsvfromDb() {
+	public void uploadDataFromService(String url) {
 		// TODO Auto-generated method stub
-		return null;
+
+	}
+
+	@Override
+	public void downloadDataToCsv(String filePath) {
+		// TODO Auto-generated method stub
 	}
 
 }
