@@ -43,6 +43,8 @@ import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.ticker.exceptions.TickerExistException;
 import telran.java51.ticker.service.TickerServiceImpl;
+import telran.java51.trading.exceptions.TradingExistException;
+import telran.java51.trading.service.TradingServiceImpl;
 import telran.java51.utils.CliUtils;
 
 @Configuration
@@ -54,6 +56,8 @@ public class CliCommands {
 	AdminServiceImpl adminService;
 	@Autowired
 	TickerServiceImpl tickerService;
+	@Autowired
+	TradingServiceImpl tradingService;
 	@Autowired
 	AuthenticationManager authenticationManager;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -149,9 +153,10 @@ public class CliCommands {
 	public String showFilesInDirectory() {
 		String directory = CliUtils.getCurrentDirectory();
 		try {
-			long quantity =  CliUtils.getFilesList(directory).stream().filter(f-> f.contains(".csv")).count();
-			if(quantity > 0) {
-				CliUtils.getFilesList(directory).stream().filter(f->f.contains("csv")).forEach(f-> System.out.println(f));
+			long quantity = CliUtils.getFilesList(directory).stream().filter(f -> f.contains(".csv")).count();
+			if (quantity > 0) {
+				CliUtils.getFilesList(directory).stream().filter(f -> f.contains("csv"))
+						.forEach(f -> System.out.println(f));
 				return "found " + quantity + " files";
 			}
 			return "CSV files not found";
@@ -175,8 +180,7 @@ public class CliCommands {
 		}
 		return Availability.available();
 	}
-	
-	
+
 	@ShellMethod(key = "add_ticker", value = "add ticker to ticker table(-n ticker name)", prefix = "-")
 	public String addTicker(
 			@ShellOption(value = "n") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String tickerName) {
@@ -185,6 +189,16 @@ public class CliCommands {
 			return "Success!";
 		} catch (TickerExistException e) {
 			return "Ticker already exist";
+		}
+	}
+
+	@ShellMethod(key = "add_trading", value = "add trading to trading table", prefix = "-")
+	public String addTrading() {
+		try {					
+			tradingService.addTrading("BTC-USD");
+			return "Success!";
+		} catch (TradingExistException e) {
+			return "Trading already exist";
 		}
 	}
 }
