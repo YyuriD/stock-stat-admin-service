@@ -1,4 +1,4 @@
-package telran.java51.model;
+package telran.java51.admin.model;
 
 import java.io.Serializable;
 

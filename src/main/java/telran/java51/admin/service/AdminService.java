@@ -1,6 +1,7 @@
-package telran.java51.service;
+package telran.java51.admin.service;
 
-import telran.java51.model.Admin;
+import telran.java51.admin.model.Admin;
+import telran.java51.ticker.model.Ticker;
 
 public interface AdminService {
 	String login(String login, String password);
@@ -18,5 +19,10 @@ public interface AdminService {
 	void uploadDataFromService(String filePath);
 	
 	void downloadDataToCsv(String filePath);
+	
+	
+	
+	
+	
 	
 }

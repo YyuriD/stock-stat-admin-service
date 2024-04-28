@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import telran.java51.model.Admin;
-import telran.java51.service.AdminServiceImpl;
+import telran.java51.admin.model.Admin;
+import telran.java51.admin.service.AdminServiceImpl;
 
 @Service
 @RequiredArgsConstructor

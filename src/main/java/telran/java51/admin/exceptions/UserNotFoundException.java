@@ -1,4 +1,4 @@
-package telran.java51.exceptions;
+package telran.java51.admin.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
 

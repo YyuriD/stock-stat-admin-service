@@ -17,6 +17,7 @@ import static telran.java51.controller.Constants.UPDATE_USER_COMMAND;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,12 @@ import org.springframework.shell.standard.ShellOption;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import telran.java51.exceptions.UserExistsException;
-import telran.java51.exceptions.UserNotFoundException;
-import telran.java51.model.Admin;
-import telran.java51.service.AdminServiceImpl;
+import telran.java51.admin.exceptions.UserExistsException;
+import telran.java51.admin.exceptions.UserNotFoundException;
+import telran.java51.admin.model.Admin;
+import telran.java51.admin.service.AdminServiceImpl;
+import telran.java51.ticker.exceptions.TickerExistException;
+import telran.java51.ticker.service.TickerServiceImpl;
 import telran.java51.utils.CliUtils;
 
 @Configuration
@@ -48,7 +51,9 @@ public class CliCommands {
 	boolean isAuthenticated = false;
 
 	@Autowired
-	AdminServiceImpl adminServiceImpl;
+	AdminServiceImpl adminService;
+	@Autowired
+	TickerServiceImpl tickerService;
 	@Autowired
 	AuthenticationManager authenticationManager;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -103,7 +108,7 @@ public class CliCommands {
 			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
 			@ShellOption(value = "l") @Size(min = MIN_ACCESS_LEVEL, max = MAX_ACCESS_LEVEL) @NotEmpty String level) {
 		try {
-			adminServiceImpl.addUser(login, password, level);
+			adminService.addUser(login, password, level);
 			return "Success!";
 		} catch (UserExistsException e) {
 			return "User already exist";
@@ -116,7 +121,7 @@ public class CliCommands {
 			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
 			@ShellOption(value = "l") @Size(min = MIN_ACCESS_LEVEL, max = MAX_ACCESS_LEVEL) @NotEmpty String level) {
 		try {
-			adminServiceImpl.updateUser(login, password, level);
+			adminService.updateUser(login, password, level);
 			return "Success!";
 		} catch (UserNotFoundException e) {
 			return "User not found";
@@ -127,7 +132,7 @@ public class CliCommands {
 	public String deleteUser(
 			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login) {
 		try {
-			adminServiceImpl.deleteUser(login);
+			adminService.deleteUser(login);
 			return "Success!";
 		} catch (UserNotFoundException e) {
 			return "User not found";
@@ -169,5 +174,17 @@ public class CliCommands {
 			return Availability.unavailable("User access level must by " + MAX_ACCESS_LEVEL);
 		}
 		return Availability.available();
+	}
+	
+	
+	@ShellMethod(key = "add_ticker", value = "add ticker to ticker table(-n ticker name)", prefix = "-")
+	public String addTicker(
+			@ShellOption(value = "n") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String tickerName) {
+		try {
+			tickerService.addTicker(tickerName, LocalDate.now(), LocalDate.now());
+			return "Success!";
+		} catch (TickerExistException e) {
+			return "Ticker already exist";
+		}
 	}
 }

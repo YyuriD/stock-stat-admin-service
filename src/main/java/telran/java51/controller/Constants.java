@@ -9,6 +9,9 @@ final class Constants {
 	 static final String DELETE_USER_COMMAND = "delete_user";
 	 static final String LOGOUT_COMMAND = "logout"; 
 	 static final String LS_COMMAND = "ls";
+	 static final String ADD_TICKER_COMMAND = "add_ticker";
+	 
+	 
 	 	 
 	 static final int MIN_LOGIN_LENGTH = 4;
 	 static final int MAX_LOGIN_LENGTH = 30;

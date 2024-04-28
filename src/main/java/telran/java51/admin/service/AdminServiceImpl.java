@@ -1,4 +1,4 @@
-package telran.java51.service;
+package telran.java51.admin.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,10 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import telran.java51.dao.AdminRepository;
-import telran.java51.exceptions.UserExistsException;
-import telran.java51.exceptions.UserNotFoundException;
-import telran.java51.model.Admin;
+import telran.java51.admin.dao.AdminRepository;
+import telran.java51.admin.exceptions.UserExistsException;
+import telran.java51.admin.exceptions.UserNotFoundException;
+import telran.java51.admin.model.Admin;
 
 @Service
 @AllArgsConstructor

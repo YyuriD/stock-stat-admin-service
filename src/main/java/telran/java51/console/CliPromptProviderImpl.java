@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import telran.java51.model.Admin;
+import telran.java51.admin.model.Admin;
 
 @Component
 public class CliPromptProviderImpl implements PromptProvider {

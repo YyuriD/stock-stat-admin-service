@@ -6,9 +6,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import telran.java51.dao.AdminRepository;
-import telran.java51.model.Admin;
-import telran.java51.service.AdminServiceImpl;
+import telran.java51.admin.dao.AdminRepository;
+import telran.java51.admin.model.Admin;
+import telran.java51.admin.service.AdminServiceImpl;
 
 @SpringBootApplication
 public class StockStatAdminServiceApplication implements CommandLineRunner {
