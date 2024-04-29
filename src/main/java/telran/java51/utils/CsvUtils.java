@@ -1,12 +1,12 @@
 package telran.java51.utils;
 
-import static telran.java51.utils.Headers.ADJ_CLOSE;
-import static telran.java51.utils.Headers.CLOSE;
-import static telran.java51.utils.Headers.DATE;
-import static telran.java51.utils.Headers.HIGH;
-import static telran.java51.utils.Headers.LOW;
-import static telran.java51.utils.Headers.OPEN;
-import static telran.java51.utils.Headers.VOLUME;
+import static telran.java51.utils.CsvHeaders.ADJ_CLOSE;
+import static telran.java51.utils.CsvHeaders.CLOSE;
+import static telran.java51.utils.CsvHeaders.DATE;
+import static telran.java51.utils.CsvHeaders.HIGH;
+import static telran.java51.utils.CsvHeaders.LOW;
+import static telran.java51.utils.CsvHeaders.OPEN;
+import static telran.java51.utils.CsvHeaders.VOLUME;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,10 +30,10 @@ import telran.java51.trading.model.TradingSession;
 
 public final class CsvUtils {
 
-	public static Set<TradingSession> parseCsvToTradings(String filePath) throws IOException {
+	public static Set<TradingSession> parseCsvToTradingSessions(String filePath) throws IOException {
 
 		Reader csvReader = new FileReader(filePath);
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(Headers.class).setSkipHeaderRecord(true)
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).build();
 		Iterable<CSVRecord> csvRecords = csvFormat.parse(csvReader);
 		Path path = Paths.get(filePath);
@@ -41,19 +41,16 @@ public final class CsvUtils {
 		ArrayList<LocalDate> dateList = new ArrayList<LocalDate>();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-		int size = 0;
 		for (CSVRecord record : csvRecords) {
 			LocalDate date = LocalDate.parse(record.get(DATE), formatter);
 			dateList.add(date);
-			size++;
 		}
-		System.out.println("size = " + size);
 
 		Ticker ticker = new Ticker(tickerName, dateList.get(0), dateList.get(dateList.size() - 1));
 		Set<TradingSession> tradingSessions = new HashSet<TradingSession>();
 
 		csvReader = new FileReader(filePath);
-		csvFormat = CSVFormat.DEFAULT.builder().setHeader(Headers.class).setSkipHeaderRecord(true)
+		csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).build();
 		csvRecords = csvFormat.parse(csvReader);
 		for (CSVRecord record : csvRecords) {
@@ -72,9 +69,8 @@ public final class CsvUtils {
 	}
 
 	public static void printCsv(String filePath) throws IOException {
-
 		Reader csvReader = new FileReader(filePath);
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(Headers.class).setSkipHeaderRecord(true).build();
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true).build();
 		Iterable<CSVRecord> csvRecords = csvFormat.parse(csvReader);
 		Arrays.stream(csvFormat.getHeader()).forEach(h -> System.out.print(h.toString() + "\t\t"));
 		System.out.println("");
@@ -87,5 +83,9 @@ public final class CsvUtils {
 			System.out.print(record.get(ADJ_CLOSE.name()) + "\t");
 			System.out.println(record.get(VOLUME.name()));
 		}
+	}
+	
+	public void saveTradingSessionsToCsv(String filePath) {
+		// TODO Auto-generated method stub		
 	}
 }

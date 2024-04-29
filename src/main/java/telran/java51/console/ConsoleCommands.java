@@ -1,6 +1,7 @@
-package telran.java51.controller;
+package telran.java51.console;
 
-import static telran.java51.controller.Constants.*;
+import static telran.java51.console.Constants.*;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,12 +30,12 @@ import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.ticker.service.TickerServiceImpl;
 import telran.java51.trading.service.TradingServiceImpl;
-import telran.java51.utils.CliUtils;
+import telran.java51.utils.ConsoleUtils;
 import telran.java51.utils.CsvUtils;
 
 @Configuration
 @ShellComponent
-public class CliCommands {
+public class ConsoleCommands {
 	boolean isAuthenticated = false;
 
 	@Autowired
@@ -136,11 +137,11 @@ public class CliCommands {
 
 	@ShellMethod(key = LS_COMMAND, value = "display all files in directory")
 	public String showFilesInDirectory() {
-		String directory = CliUtils.getCurrentDirectory();
+		String directory = ConsoleUtils.getCurrentDirectory();
 		try {
-			long quantity = CliUtils.getFilesList(directory).stream().filter(f -> f.contains(".csv")).count();
+			long quantity = ConsoleUtils.getFilesList(directory).stream().filter(f -> f.contains(".csv")).count();
 			if (quantity > 0) {
-				CliUtils.getFilesList(directory).stream().filter(f -> f.contains("csv"))
+				ConsoleUtils.getFilesList(directory).stream().filter(f -> f.contains("csv"))
 						.forEach(f -> System.out.println(f));
 				return "found " + quantity + " files";
 			}
@@ -152,6 +153,29 @@ public class CliCommands {
 		}
 	}
 
+
+	@ShellMethod(key = PRINT_CSV_COMMAND, value = "print data from csv", prefix = "-")
+	public String printCsv(@ShellOption(value = "f") String fileName) {
+		String filePath = ConsoleUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
+		try {
+			CsvUtils.printCsv(filePath);
+			return "Printed from " + filePath;
+		} catch (IOException e) {
+			return "fault";
+		}
+	}
+
+	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload data from csv to db", prefix = "-")
+	public String importCsv(@ShellOption(value = "f") String fileName) {
+		String filePath = ConsoleUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
+		try {			
+			tradingService.addData(CsvUtils.parseCsvToTradingSessions(filePath));
+			return "Success!";
+		} catch (IOException e) {
+			return "fault";
+		}
+	}
+	
 	@ShellMethodAvailability({ "add_user", "update_user", "delete_user" })
 	public Availability accessCheck() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -166,36 +190,4 @@ public class CliCommands {
 		return Availability.available();
 	}
 
-//	@ShellMethod(key = "add_ticker", value = "add ticker to ticker table(-n ticker name)", prefix = "-")
-//	public String addTicker(
-//			@ShellOption(value = "n") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String tickerName) {
-//		try {
-//			tickerService.addTicker(tickerName, LocalDate.now(), LocalDate.now());
-//			return "Success!";
-//		} catch (TickerExistException e) {
-//			return "Ticker already exist";
-//		}
-//	}
-
-	@ShellMethod(key = PRINT_CSV_COMMAND, value = "print data from csv", prefix = "-")
-	public String printCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = CliUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
-		try {
-			CsvUtils.printCsv(filePath);
-			return "Printed from " + filePath;
-		} catch (IOException e) {
-			return "fault";
-		}
-	}
-
-	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload trading data from csv to db", prefix = "-")
-	public String importCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = CliUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
-		try {			
-			tradingService.addTradings(CsvUtils.parseCsvToTradings(filePath));
-			return "Success!";
-		} catch (IOException e) {
-			return "fault";
-		}
-	}
 }

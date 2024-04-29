@@ -1,6 +1,6 @@
 package telran.java51.utils;
 
-public enum Headers {
+public enum CsvHeaders {
 	
 	DATE ("Date"),
 	OPEN("Open"),
@@ -10,6 +10,6 @@ public enum Headers {
 	ADJ_CLOSE("Adj close"),
 	VOLUME("Volume");
 
-	Headers(String string) {
+	CsvHeaders(String string) {
 	}		
 }

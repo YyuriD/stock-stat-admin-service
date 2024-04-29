@@ -1,4 +1,4 @@
-package telran.java51.controller;
+package telran.java51.console;
 
 final class Constants {
 	 static final String GREETING_MESSAGE = "\nType 'help' for help.\n";
@@ -12,8 +12,7 @@ final class Constants {
 	 static final String PRINT_CSV_COMMAND = "print_csv";
 	 static final String IMPORT_CSV_COMMAND = "import_csv";
 	 
-	 
-	 	 
+	  	 
 	 static final int MIN_LOGIN_LENGTH = 4;
 	 static final int MAX_LOGIN_LENGTH = 30;
 	 static final int MIN_PASS_LENGTH = 4;

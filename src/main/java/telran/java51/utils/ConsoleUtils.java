@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class CliUtils {
+public final class ConsoleUtils {
 
 	public static Set<String> getFilesList(String directory) throws IOException {
 		try (Stream<Path> stream = Files.list(Paths.get(directory))) {

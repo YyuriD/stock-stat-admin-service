@@ -37,7 +37,6 @@ public class AdminServiceImpl implements AdminService {
 			throw new UserExistsException();
 		}
 		// TODO CheckCredentials
-		// TODO WrongCredentialsException
 		password = passwordEncoder.encode(password);
 		Admin user = new Admin(login, password, Integer.parseInt(accessLevel));
 		return adminRepository.save(user);
@@ -47,7 +46,6 @@ public class AdminServiceImpl implements AdminService {
 	public Admin updateUser(String login, String password, String accessLevel) {
 		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
 		// TODO CheckCredentials
-		// TODO WrongCredentialsException
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
 		user.setAccessLevel(Integer.parseInt(accessLevel));
@@ -60,27 +58,5 @@ public class AdminServiceImpl implements AdminService {
 		adminRepository.delete(user);
 		return user;
 	}
-
-	@Override
-	public boolean uploadDataFromCsv(String filePath) {
-		//TODO parse csv with Parser Class, get tickerName from file name and get dateFrom and dateTo,
-		// create Ticker, save new ticker into each Trading, create Tradings set 
-		//execute TradingService.addTradings(Tradings)
-		return false;
-	}
-
-	@Override
-	public void uploadDataFromService(String filePath) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void downloadDataToCsv(String filePath) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	
-
 }

@@ -19,11 +19,23 @@ public class TradingServiceImpl implements TradingService {
 	final TickerServiceImpl tickerService;
 
 	@Override
-	public boolean addTradings(Set<TradingSession> tradingSessions) {	
+	public boolean addData(Set<TradingSession> tradingSessions) {	
 		TradingSession trading = tradingSessions.stream().findAny().orElseThrow(TradingNotFoundException::new);		
-		tickerService.addTicker(trading.getTicker());	//TODO check adding of ticker
+		tickerService.addTicker(trading.getTicker());	//TODO check if ticker added
 		tradingRepository.saveAll(tradingSessions);
 		return true;
 	}
+
+	@Override
+	public void uploadDataFromRemoteService(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void downloadData(String filePath) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }

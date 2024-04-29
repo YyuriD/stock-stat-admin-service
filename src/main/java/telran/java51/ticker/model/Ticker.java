@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import telran.java51.trading.model.TradingSession;
 
-//@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Getter

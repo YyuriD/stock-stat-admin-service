@@ -12,10 +12,4 @@ public interface AdminService {
 
 	Admin deleteUser(String login);
 
-	boolean uploadDataFromCsv(String filePath);
-
-	void uploadDataFromService(String filePath);
-
-	void downloadDataToCsv(String filePath);
-
 }

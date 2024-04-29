@@ -30,8 +30,7 @@ public class ServiceConfiguration {
 	AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder);
-		
+		authenticationProvider.setPasswordEncoder(passwordEncoder);		
 		ProviderManager authenticationManager = new ProviderManager(Arrays.asList(authenticationProvider));
         return authenticationManager;
 	}
