@@ -1,17 +1,14 @@
 package telran.java51.trading.service;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.Set;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import telran.java51.ticker.dao.TickerRepository;
-import telran.java51.ticker.model.Ticker;
+import telran.java51.ticker.service.TickerServiceImpl;
 import telran.java51.trading.dao.TradingRepository;
+import telran.java51.trading.exceptions.TradingNotFoundException;
 import telran.java51.trading.model.TradingSession;
 
 @Service
@@ -19,19 +16,16 @@ import telran.java51.trading.model.TradingSession;
 @Configuration
 public class TradingServiceImpl implements TradingService {
 	final TradingRepository tradingRepository;
-	final TickerRepository tickerRepository;
+	final TickerServiceImpl tickerService;
 
 	@Override
-	public TradingSession addTrading(String tickerName) {
-		Set<TradingSession> tradings = null;//TODO 
-		Ticker ticker = tickerRepository.findById(tickerName).
-				orElse(tickerRepository.save(new Ticker(tickerName, LocalDate.now(), LocalDate.now(), tradings)));
+	public boolean addTradings(Set<TradingSession> tradingSessions) {
+		//TODO parse csv, get tickerName from file name and get dateFrom and dateTo,
 		
-		TradingSession trading = new TradingSession(ticker, LocalDate.now().minusDays(1),
-				BigDecimal.valueOf(100),BigDecimal.valueOf(95), 
-				BigDecimal.valueOf(110), BigDecimal.valueOf(110), 
-				BigDecimal.valueOf(108),BigInteger.valueOf(50000));
-		return tradingRepository.save(trading);
+		TradingSession trading = tradingSessions.stream().findAny().orElseThrow(TradingNotFoundException::new);		
+		tickerService.addTicker(trading.getTicker());	//TODO check adding of ticker
+		tradingRepository.saveAll(tradingSessions);
+		return true;
 	}
 
 }

@@ -195,7 +195,7 @@ public class CliCommands {
 	@ShellMethod(key = "add_trading", value = "add trading to trading table", prefix = "-")
 	public String addTrading() {
 		try {					
-			tradingService.addTrading("BTC-USD");
+			tradingService.addTradings("BTC-USD");
 			return "Success!";
 		} catch (TradingExistException e) {
 			return "Trading already exist";

@@ -18,6 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import telran.java51.ticker.model.Ticker;
 
 @NoArgsConstructor
@@ -26,6 +27,7 @@ import telran.java51.ticker.model.Ticker;
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "trading_sessions")
+@ToString
 public class TradingSession  implements Serializable{
 
 	private static final long serialVersionUID = -179664029256824275L;
@@ -49,8 +51,7 @@ public class TradingSession  implements Serializable{
 	@ManyToOne	
 	@JoinColumn(name = "ticker")
 	Ticker ticker;
-	
-	
+		
 	@Temporal(TemporalType.DATE)
 	LocalDate date;
 	

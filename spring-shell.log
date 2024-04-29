@@ -205,3 +205,8 @@
 1714313783141:add_trading
 1714327714184:add_ticker -n GOOG
 1714329668896:add_trading
+1714336056550:add_ticker -n GOOG
+1714368483727:add_trading
+1714368510693:stacktrace
+1714368750091:add_trading
+1714369507464:add_ticker -n AAPL

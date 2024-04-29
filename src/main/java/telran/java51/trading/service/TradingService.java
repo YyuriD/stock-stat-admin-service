@@ -1,7 +1,9 @@
 package telran.java51.trading.service;
 
+import java.util.Set;
+
 import telran.java51.trading.model.TradingSession;
 
 public interface TradingService {
-	TradingSession addTrading(String tickerName);
+	boolean addTradings(Set<TradingSession> tradingSessions);
 }
