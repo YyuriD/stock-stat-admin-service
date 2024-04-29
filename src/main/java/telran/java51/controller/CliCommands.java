@@ -191,9 +191,8 @@ public class CliCommands {
 	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload trading data from csv to db", prefix = "-")
 	public String importCsv(@ShellOption(value = "f") String fileName) {
 		String filePath = CliUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
-
-		try {
-			CsvUtils.parseCsvTradings(filePath);
+		try {			
+			tradingService.addTradings(CsvUtils.parseCsvToTradings(filePath));
 			return "Success!";
 		} catch (IOException e) {
 			return "fault";

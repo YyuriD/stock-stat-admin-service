@@ -216,3 +216,12 @@
 1714385297610:import_csv -f AAPL.csv
 1714387453512:printt_csv -f AAPL.csv
 1714387466094:print_csv -f AAPL.csv
+1714407056549:import_csv -f AAPL.csv
+1714407084866:stacktrace
+1714407193519:import_csv -f AAPL.csv
+1714407207348:stacktrace
+1714407515743:import_csv -f AAPL.csv
+1714409074231:ls
+1714409115513:import_csv -f BTC-USD.csv
+1714409490059:stacktrace
+1714410289028:import_csv -f BTC-USD.csv

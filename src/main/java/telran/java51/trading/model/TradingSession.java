@@ -24,7 +24,7 @@ import telran.java51.ticker.model.Ticker;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"ticker","date"})
 @Entity
 @Table(name = "trading_sessions")
 @ToString
