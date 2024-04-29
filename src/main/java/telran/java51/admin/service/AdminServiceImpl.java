@@ -27,20 +27,6 @@ public class AdminServiceImpl implements AdminService {
 	AuthenticationManager authenticationManager;
 
 	@Override
-	public String login(String login, String password) {
-//		try {
-//			Authentication result = authenticationManager
-//					.authenticate(new UsernamePasswordAuthenticationToken(login, password));
-//			SecurityContextHolder.getContext().setAuthentication(result);
-//			return "Welcome to admin service";
-//		} catch (AuthenticationException e) {
-//			System.out.println(e.getMessage());
-//			return "Authentication failed";
-//		}
-		return null;
-	}
-
-	@Override
 	public Admin findByName(String login) {
 		return adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
 	}
@@ -76,19 +62,25 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public void uploadDataFromCsv(String filePath) {
-		// TODO Auto-generated method stub
+	public boolean uploadDataFromCsv(String filePath) {
+		//TODO parse csv with Parser Class, get tickerName from file name and get dateFrom and dateTo,
+		// create Ticker, save new ticker into each Trading, create Tradings set 
+		//execute TradingService.addTradings(Tradings)
+		return false;
 	}
 
 	@Override
-	public void uploadDataFromService(String url) {
+	public void uploadDataFromService(String filePath) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void downloadDataToCsv(String filePath) {
 		// TODO Auto-generated method stub
+		
 	}
+
+	
 
 }

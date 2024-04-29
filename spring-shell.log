@@ -210,3 +210,9 @@
 1714368510693:stacktrace
 1714368750091:add_trading
 1714369507464:add_ticker -n AAPL
+1714373730615:ls
+1714384876708:import_csv -p fsfs
+1714385269950:ls
+1714385297610:import_csv -f AAPL.csv
+1714387453512:printt_csv -f AAPL.csv
+1714387466094:print_csv -f AAPL.csv

@@ -19,9 +19,7 @@ public class TradingServiceImpl implements TradingService {
 	final TickerServiceImpl tickerService;
 
 	@Override
-	public boolean addTradings(Set<TradingSession> tradingSessions) {
-		//TODO parse csv, get tickerName from file name and get dateFrom and dateTo,
-		
+	public boolean addTradings(Set<TradingSession> tradingSessions) {	
 		TradingSession trading = tradingSessions.stream().findAny().orElseThrow(TradingNotFoundException::new);		
 		tickerService.addTicker(trading.getTicker());	//TODO check adding of ticker
 		tradingRepository.saveAll(tradingSessions);

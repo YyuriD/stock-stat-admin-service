@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import telran.java51.ticker.dao.TickerRepository;
-import telran.java51.ticker.exceptions.TickerNotFoundException;
 import telran.java51.ticker.model.Ticker;
 
 @Service

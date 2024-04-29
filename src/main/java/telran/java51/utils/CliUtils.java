@@ -22,7 +22,5 @@ public final class CliUtils {
 		return currentDirectory;
 	}
 	
-	public void parseCsvToStats() {
-		//TODO
-	}
+	
 }

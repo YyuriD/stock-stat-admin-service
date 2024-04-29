@@ -9,7 +9,8 @@ final class Constants {
 	 static final String DELETE_USER_COMMAND = "delete_user";
 	 static final String LOGOUT_COMMAND = "logout"; 
 	 static final String LS_COMMAND = "ls";
-	 static final String ADD_TICKER_COMMAND = "add_ticker";
+	 static final String PRINT_CSV_COMMAND = "print_csv";
+	 static final String IMPORT_CSV_COMMAND = "import_csv";
 	 
 	 
 	 	 

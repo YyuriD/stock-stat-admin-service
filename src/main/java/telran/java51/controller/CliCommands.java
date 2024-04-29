@@ -1,23 +1,9 @@
 package telran.java51.controller;
 
-import static telran.java51.controller.Constants.ADD_USER_COMMAND;
-import static telran.java51.controller.Constants.DELETE_USER_COMMAND;
-import static telran.java51.controller.Constants.GREETING_MESSAGE;
-import static telran.java51.controller.Constants.LOGIN_COMMAND;
-import static telran.java51.controller.Constants.LOGOUT_COMMAND;
-import static telran.java51.controller.Constants.LS_COMMAND;
-import static telran.java51.controller.Constants.MAX_ACCESS_LEVEL;
-import static telran.java51.controller.Constants.MAX_LOGIN_LENGTH;
-import static telran.java51.controller.Constants.MAX_PASS_LENGTH;
-import static telran.java51.controller.Constants.MIN_ACCESS_LEVEL;
-import static telran.java51.controller.Constants.MIN_LOGIN_LENGTH;
-import static telran.java51.controller.Constants.MIN_PASS_LENGTH;
-import static telran.java51.controller.Constants.UPDATE_USER_COMMAND;
-
+import static telran.java51.controller.Constants.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +27,10 @@ import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
-import telran.java51.ticker.exceptions.TickerExistException;
 import telran.java51.ticker.service.TickerServiceImpl;
-import telran.java51.trading.exceptions.TradingExistException;
 import telran.java51.trading.service.TradingServiceImpl;
 import telran.java51.utils.CliUtils;
+import telran.java51.utils.CsvUtils;
 
 @Configuration
 @ShellComponent
@@ -181,24 +166,37 @@ public class CliCommands {
 		return Availability.available();
 	}
 
-	@ShellMethod(key = "add_ticker", value = "add ticker to ticker table(-n ticker name)", prefix = "-")
-	public String addTicker(
-			@ShellOption(value = "n") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String tickerName) {
+//	@ShellMethod(key = "add_ticker", value = "add ticker to ticker table(-n ticker name)", prefix = "-")
+//	public String addTicker(
+//			@ShellOption(value = "n") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String tickerName) {
+//		try {
+//			tickerService.addTicker(tickerName, LocalDate.now(), LocalDate.now());
+//			return "Success!";
+//		} catch (TickerExistException e) {
+//			return "Ticker already exist";
+//		}
+//	}
+
+	@ShellMethod(key = PRINT_CSV_COMMAND, value = "print data from csv", prefix = "-")
+	public String printCsv(@ShellOption(value = "f") String fileName) {
+		String filePath = CliUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
 		try {
-			tickerService.addTicker(tickerName, LocalDate.now(), LocalDate.now());
-			return "Success!";
-		} catch (TickerExistException e) {
-			return "Ticker already exist";
+			CsvUtils.printCsv(filePath);
+			return "Printed from " + filePath;
+		} catch (IOException e) {
+			return "fault";
 		}
 	}
 
-	@ShellMethod(key = "add_trading", value = "add trading to trading table", prefix = "-")
-	public String addTrading() {
-		try {					
-			tradingService.addTradings("BTC-USD");
+	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload trading data from csv to db", prefix = "-")
+	public String importCsv(@ShellOption(value = "f") String fileName) {
+		String filePath = CliUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
+
+		try {
+			CsvUtils.parseCsvTradings(filePath);
 			return "Success!";
-		} catch (TradingExistException e) {
-			return "Trading already exist";
+		} catch (IOException e) {
+			return "fault";
 		}
 	}
 }

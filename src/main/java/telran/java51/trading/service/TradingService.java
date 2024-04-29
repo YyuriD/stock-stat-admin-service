@@ -6,4 +6,5 @@ import telran.java51.trading.model.TradingSession;
 
 public interface TradingService {
 	boolean addTradings(Set<TradingSession> tradingSessions);
+	
 }
