@@ -227,3 +227,12 @@
 1714410289028:import_csv -f BTC-USD.csv
 1714416362856:delete_user -u operator4
 1714416376419:add_user -u operator4 -p 1234 -l 2
+1714470504935:ls
+1714471592861:import_csv -f AAPL.csv
+1714471604573:import_csv -f BTC-USD.csv
+1714471818059:stacktrace
+1714472823722:import_csv -f BTC-USD.csv
+1714472867094:[1mstacktrace
+1714472875281:stacktrace
+1714474477585:import_csv -f BTC-USD.csv
+1714479240261:stacktrace

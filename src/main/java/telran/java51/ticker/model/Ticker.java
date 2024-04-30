@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -44,7 +43,7 @@ public class Ticker {
 	@Temporal(TemporalType.DATE)
 	LocalDate dateTo;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "ticker") // cascade = CascadeType.REMOVE does not work
+	@OneToMany( mappedBy = "ticker") // cascade = CascadeType.REMOVE does not work
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	Set<TradingSession> tradingSessions;
 
