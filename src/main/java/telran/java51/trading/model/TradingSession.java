@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -20,13 +18,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import telran.java51.security.TradingSessionId;
-import telran.java51.ticker.model.Ticker;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"ticker","date"})
+@EqualsAndHashCode(of = {"tickerName","date"})
 @Entity
 @Table(name = "trading_sessions")
 @ToString
@@ -36,11 +33,9 @@ public class TradingSession  implements Serializable{
 	private static final long serialVersionUID = -179664029256824275L;
 		
 	@Id
-	@ManyToOne
-	@JoinColumn(name = "ticker")
-	Ticker ticker;
-		
-	@Id
+	String tickerName;
+	
+	@Id	
 	@Temporal(TemporalType.DATE)
 	LocalDate date;
 	

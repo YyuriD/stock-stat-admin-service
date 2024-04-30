@@ -1,6 +1,20 @@
 package telran.java51.console;
 
-import static telran.java51.console.Constants.*;
+import static telran.java51.console.Constants.ADD_USER_COMMAND;
+import static telran.java51.console.Constants.DELETE_USER_COMMAND;
+import static telran.java51.console.Constants.GREETING_MESSAGE;
+import static telran.java51.console.Constants.IMPORT_CSV_COMMAND;
+import static telran.java51.console.Constants.LOGIN_COMMAND;
+import static telran.java51.console.Constants.LOGOUT_COMMAND;
+import static telran.java51.console.Constants.LS_COMMAND;
+import static telran.java51.console.Constants.MAX_ACCESS_LEVEL;
+import static telran.java51.console.Constants.MAX_LOGIN_LENGTH;
+import static telran.java51.console.Constants.MAX_PASS_LENGTH;
+import static telran.java51.console.Constants.MIN_ACCESS_LEVEL;
+import static telran.java51.console.Constants.MIN_LOGIN_LENGTH;
+import static telran.java51.console.Constants.MIN_PASS_LENGTH;
+import static telran.java51.console.Constants.PRINT_CSV_COMMAND;
+import static telran.java51.console.Constants.UPDATE_USER_COMMAND;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.shell.Availability;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -24,24 +39,28 @@ import org.springframework.shell.standard.ShellOption;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
-import telran.java51.ticker.service.TickerServiceImpl;
 import telran.java51.trading.service.TradingServiceImpl;
 import telran.java51.utils.ConsoleUtils;
 import telran.java51.utils.CsvUtils;
 
 @Configuration
 @ShellComponent
-public class ConsoleCommands {
+public class ConsoleCommands  {
 	boolean isAuthenticated = false;
 
 	@Autowired
-	AdminServiceImpl adminService;
+	AdminRepository adminRepository;
 	@Autowired
-	TickerServiceImpl tickerService;
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	AdminServiceImpl adminService;
+	
 	@Autowired
 	TradingServiceImpl tradingService;
 	@Autowired

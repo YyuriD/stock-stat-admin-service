@@ -25,7 +25,6 @@ import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
-import telran.java51.ticker.model.Ticker;
 import telran.java51.trading.model.TradingSession;
 
 public final class CsvUtils {
@@ -45,8 +44,7 @@ public final class CsvUtils {
 			LocalDate date = LocalDate.parse(record.get(DATE), formatter);
 			dateList.add(date);
 		}
-
-		Ticker ticker = new Ticker(tickerName, dateList.get(0), dateList.get(dateList.size() - 1));
+		
 		Set<TradingSession> tradingSessions = new HashSet<TradingSession>();
 
 		csvReader = new FileReader(filePath);
@@ -61,7 +59,7 @@ public final class CsvUtils {
 			BigDecimal close = BigDecimal.valueOf(Double.parseDouble(record.get(CLOSE.name())));
 			BigDecimal adjClose = BigDecimal.valueOf(Double.parseDouble(record.get(ADJ_CLOSE.name())));
 			BigInteger volume = BigInteger.valueOf(Long.parseLong(record.get(VOLUME.name())));
-			TradingSession trading = new TradingSession(ticker, date, open, high, low, close, adjClose, volume);
+			TradingSession trading = new TradingSession(tickerName, date, open, high, low, close, adjClose, volume);
 			tradingSessions.add(trading);
 		}
 		System.out.println("tradingSessions size = " + tradingSessions.size());
