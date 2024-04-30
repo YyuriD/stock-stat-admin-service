@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.model.Admin;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"telran.java51"})
 public class StockStatAdminServiceApplication implements CommandLineRunner {
 
 	@Autowired
@@ -24,8 +24,9 @@ public class StockStatAdminServiceApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		final Integer MAX_ACCESS_LEVEL = 10;
-
-		System.out.println("Init...");
+		
+		System.out.println("Initialization...");
+		
 		if (!adminRepository.existsById("admin")) {
 			String password = passwordEncoder.encode("admin");
 			Admin admin = new Admin("admin", password, MAX_ACCESS_LEVEL);
