@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import telran.java51.admin.model.Admin;
 
 @Component
-public class CliPromptProviderImpl implements PromptProvider {
+public class ConsolePromptProviderImpl implements PromptProvider {
 	private final String NOT_AUTHENTICATED = "Not authenticated";
 	private final String AUTHORIZED = "Admin-service";
 	private final String POSTFIX = ":>";

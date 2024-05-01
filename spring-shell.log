@@ -242,3 +242,6 @@
 1714510039248:import_csv -f AAPL.csv
 1714511480455:import_csv -f BTC-USD.csv
 1714511675289:print_csv -f AAPL.csv
+1714567364227:help
+1714567368110:ls
+1714567437338:import_csv -f AAPL.csv

@@ -22,7 +22,9 @@ import java.io.InputStreamReader;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -48,9 +50,10 @@ import telran.java51.trading.service.TradingServiceImpl;
 import telran.java51.utils.ConsoleUtils;
 import telran.java51.utils.CsvUtils;
 
+
 @Configuration
 @ShellComponent
-public class ConsoleCommands  {
+public class ConsoleCommands {
 	boolean isAuthenticated = false;
 
 	@Autowired
