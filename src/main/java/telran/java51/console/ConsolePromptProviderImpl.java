@@ -8,16 +8,11 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
-
+import static telran.java51.console.Constants.*;
 import telran.java51.admin.model.Admin;
 
 @Component
 public class ConsolePromptProviderImpl implements PromptProvider {
-	private final String NOT_AUTHENTICATED = "Not authenticated";
-	private final String AUTHORIZED = "Admin-service";
-	private final String POSTFIX = ":>";
-	private final String ADMIN_SIGN = "#";
-	private final String USER_SIGN = "@";
 
 	@Override
 	public AttributedString getPrompt() {
@@ -42,5 +37,4 @@ public class ConsolePromptProviderImpl implements PromptProvider {
 	private String promptBuilder(String sign, String userName) {
 		return AUTHORIZED + sign + userName + POSTFIX;
 	}
-
 }

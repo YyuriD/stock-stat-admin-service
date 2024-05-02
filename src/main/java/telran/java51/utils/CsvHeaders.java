@@ -1,7 +1,6 @@
 package telran.java51.utils;
 
 public enum CsvHeaders {
-	
 	DATE ("Date"),
 	OPEN("Open"),
 	HIGH("High"),
@@ -11,5 +10,5 @@ public enum CsvHeaders {
 	VOLUME("Volume");
 
 	CsvHeaders(String string) {
-	}		
+	}
 }
