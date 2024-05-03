@@ -18,7 +18,12 @@ public class StockStatAdminServiceApplication  {
 	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
-		SpringApplication.run(StockStatAdminServiceApplication.class, args);
+		try {
+			SpringApplication.run(StockStatAdminServiceApplication.class, args);
+		} catch (Exception e) {
+			System.out.println("fail to start application");
+		}
+		
 	}
 	
 	@PostConstruct

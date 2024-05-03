@@ -146,6 +146,9 @@ public class ConsoleCommands {
 			return "Success!";
 		} catch (UserNotFoundException e) {
 			return "User not found";
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
 		}
 	}
 
@@ -166,9 +169,8 @@ public class ConsoleCommands {
 				return "found " + quantity + " files";
 			}
 			return "CSV files not found";
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return "fail to show files";
 		}
 	}
@@ -180,7 +182,8 @@ public class ConsoleCommands {
 		try {
 			CsvUtils.printCsv(filePath);
 			return "Printed from " + filePath;
-		} catch (IOException e) {
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return "fault";
 		}
 	}
@@ -189,9 +192,22 @@ public class ConsoleCommands {
 	public String importCsv(@ShellOption(value = "f") String fileName) {
 		String filePath = ConsoleUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
 		try {			
-			tradingService.addData(CsvUtils.parseCsvToTradingSessions(filePath));
+			tradingService.addData(CsvUtils.getTradingSessions(filePath));
 			return "Success!";
-		} catch (IOException e) {
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
+	
+	@ShellMethod(key = "upload", value = "upload data from remote service to db", prefix = "-")
+	public String importFromRemote(@ShellOption(value = "n") String tickereName) {
+		
+		try {			
+			tradingService.addData(tradingService.getDataFromRemoteService(tickereName));
+			return "Success!";
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return "fault";
 		}
 	}

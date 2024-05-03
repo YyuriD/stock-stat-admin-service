@@ -8,17 +8,17 @@ import static telran.java51.utils.CsvHeaders.LOW;
 import static telran.java51.utils.CsvHeaders.OPEN;
 import static telran.java51.utils.CsvHeaders.VOLUME;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,28 +29,43 @@ import telran.java51.trading.model.TradingSession;
 
 public final class CsvUtils {
 
-	public static Set<TradingSession> parseCsvToTradingSessions(String filePath) throws IOException {
+	public static Set<TradingSession> getTradingSessions(String text, String tickerName) {
+		return parseCsv(new StringReader(text), tickerName);
+	}
 
-		Reader csvReader = new FileReader(filePath);
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
-				.setIgnoreHeaderCase(true).build();
-		Iterable<CSVRecord> csvRecords = csvFormat.parse(csvReader);
+	public static Set<TradingSession> getTradingSessions(String filePath) throws FileNotFoundException {
 		Path path = Paths.get(filePath);
 		String tickerName = path.getFileName().toString().split("\\.")[0];
-		ArrayList<LocalDate> dateList = new ArrayList<LocalDate>();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		return parseCsv(new FileReader(filePath), tickerName);
+	}
 
-		for (CSVRecord record : csvRecords) {
-			LocalDate date = LocalDate.parse(record.get(DATE), formatter);
-			dateList.add(date);
+	public static void printCsv(String filePath) throws IOException {
+		Set<TradingSession> tradingSessions = getTradingSessions(filePath);
+		System.out.println();
+		for (TradingSession tradingSession : tradingSessions) {
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.print(tradingSession.toString() + "\t");
+			System.out.println(tradingSession.toString());
 		}
-		
-		Set<TradingSession> tradingSessions = new HashSet<TradingSession>();
+	}
 
-		csvReader = new FileReader(filePath);
-		csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
+	public static Set<TradingSession> parseCsv(Reader csvReader, String tickerName) {
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).build();
-		csvRecords = csvFormat.parse(csvReader);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]");
+		Set<TradingSession> tradingSessions = new HashSet<TradingSession>();
+		Iterable<CSVRecord> csvRecords = null;
+		try {
+			csvRecords = csvFormat.parse(csvReader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		for (CSVRecord record : csvRecords) {
 			LocalDate date = LocalDate.parse(record.get(DATE.name()), formatter);
 			BigDecimal open = BigDecimal.valueOf(Double.parseDouble(record.get(OPEN.name())));
@@ -62,28 +77,11 @@ public final class CsvUtils {
 			TradingSession trading = new TradingSession(tickerName, date, open, high, low, close, adjClose, volume);
 			tradingSessions.add(trading);
 		}
-		System.out.println("tradingSessions size = " + tradingSessions.size());
+		System.out.println("Parsed trading sessions size = " + tradingSessions.size());
 		return tradingSessions;
 	}
 
-	public static void printCsv(String filePath) throws IOException {
-		Reader csvReader = new FileReader(filePath);
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true).build();
-		Iterable<CSVRecord> csvRecords = csvFormat.parse(csvReader);
-		Arrays.stream(csvFormat.getHeader()).forEach(h -> System.out.print(h.toString() + "\t\t"));
-		System.out.println("");
-		for (CSVRecord record : csvRecords) {
-			System.out.print(record.get(DATE.name()) + "\t");
-			System.out.print(record.get(OPEN.name()) + "\t");
-			System.out.print(record.get(HIGH.name()) + "\t");
-			System.out.print(record.get(LOW.name()) + "\t");
-			System.out.print(record.get(CLOSE.name()) + "\t");
-			System.out.print(record.get(ADJ_CLOSE.name()) + "\t");
-			System.out.println(record.get(VOLUME.name()));
-		}
-	}
-	
 	public void saveTradingSessionsToCsv(String filePath) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 	}
 }

@@ -8,7 +8,7 @@ public interface TradingService {
 	
 	boolean addData(Set<TradingSession> tradingSessions);
 	
-	void uploadDataFromRemoteService(String filePath);
+	Set<TradingSession> getDataFromRemoteService(String TickerName);
 
 	void downloadData(String filePath);
 	
