@@ -12,6 +12,7 @@ final class Constants {
 	static final String LS_COMMAND = "ls";
 	static final String PRINT_CSV_COMMAND = "print_csv";
 	static final String IMPORT_CSV_COMMAND = "import_csv";
+	static final String UPLOAD_REMOTE_COMMAND = "upload_remote";
 
 	static final int MIN_LOGIN_LENGTH = 4;
 	static final int MAX_LOGIN_LENGTH = 30;

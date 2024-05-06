@@ -15,19 +15,23 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
 import telran.java51.trading.model.TradingSession;
 
-public final class CsvUtils {
+public final class Utils {
 
 	public static Set<TradingSession> getTradingSessions(String text, String tickerName) {
 		return parseCsv(new StringReader(text), tickerName);
@@ -77,10 +81,28 @@ public final class CsvUtils {
 			TradingSession trading = new TradingSession(tickerName, date, open, high, low, close, adjClose, volume);
 			tradingSessions.add(trading);
 		}
-		System.out.println("Parsed trading sessions size = " + tradingSessions.size());
+		System.out.println("Read " + tradingSessions.size() + " trading sessions.");
 		return tradingSessions;
 	}
 
+	public static String getFullPath(String fileName) {		
+		String fileSeparator = FileSystems.getDefault().getSeparator();		
+		return Utils.getCurrentDirectory() + fileSeparator + fileName;
+	}
+	
+	public static Set<String> getFilesList(String directory) throws IOException {
+		try (Stream<Path> stream = Files.list(Paths.get(directory))) {
+			return stream.filter(file -> !Files.isDirectory(file)).map(Path::getFileName).map(Path::toString)
+					.collect(Collectors.toSet());
+		}
+	}
+	
+	public static String getCurrentDirectory() {
+		String currentDirectory = Paths.get("").toAbsolutePath().toString();
+		return currentDirectory;
+	}
+	
+	
 	public void saveTradingSessionsToCsv(String filePath) {
 		// TODO Auto-generated method stub
 	}

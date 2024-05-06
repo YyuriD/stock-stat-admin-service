@@ -6,7 +6,7 @@ import telran.java51.trading.model.TradingSession;
 
 public interface TradingService {
 	
-	boolean addData(Set<TradingSession> tradingSessions);
+	long addData(Set<TradingSession> tradingSessions);
 	
 	Set<TradingSession> getDataFromRemoteService(String TickerName);
 

@@ -15,6 +15,7 @@ import static telran.java51.console.Constants.MIN_LOGIN_LENGTH;
 import static telran.java51.console.Constants.MIN_PASS_LENGTH;
 import static telran.java51.console.Constants.PRINT_CSV_COMMAND;
 import static telran.java51.console.Constants.UPDATE_USER_COMMAND;
+import static telran.java51.console.Constants.UPLOAD_REMOTE_COMMAND;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,9 +46,7 @@ import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.service.TradingServiceImpl;
-import telran.java51.utils.ConsoleUtils;
-import telran.java51.utils.CsvUtils;
-
+import telran.java51.utils.Utils;
 
 @Configuration
 @ShellComponent
@@ -58,10 +57,10 @@ public class ConsoleCommands {
 	AdminRepository adminRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	AdminServiceImpl adminService;
-	
+
 	@Autowired
 	TradingServiceImpl tradingService;
 	@Autowired
@@ -146,7 +145,7 @@ public class ConsoleCommands {
 			return "Success!";
 		} catch (UserNotFoundException e) {
 			return "User not found";
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
 		}
@@ -158,13 +157,13 @@ public class ConsoleCommands {
 		return "Goodbye!\n";
 	}
 
-	@ShellMethod(key = LS_COMMAND, value = "display all files in directory")
+	@ShellMethod(key = LS_COMMAND, value = "display all csv files in directory")
 	public String showFilesInDirectory() {
-		String directory = ConsoleUtils.getCurrentDirectory();
+		String directory = Utils.getCurrentDirectory();
 		try {
-			long quantity = ConsoleUtils.getFilesList(directory).stream().filter(f -> f.contains(".csv")).count();
+			long quantity = Utils.getFilesList(directory).stream().filter(f -> f.contains(".csv")).count();
 			if (quantity > 0) {
-				ConsoleUtils.getFilesList(directory).stream().filter(f -> f.contains("csv"))
+				Utils.getFilesList(directory).stream().filter(f -> f.contains("csv"))
 						.forEach(f -> System.out.println(f));
 				return "found " + quantity + " files";
 			}
@@ -175,43 +174,51 @@ public class ConsoleCommands {
 		}
 	}
 
-
 	@ShellMethod(key = PRINT_CSV_COMMAND, value = "print data from csv", prefix = "-")
 	public String printCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = ConsoleUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
+		String filePath = Utils.getFullPath(fileName);
 		try {
-			CsvUtils.printCsv(filePath);
-			return "Printed from " + filePath;
+			Utils.printCsv(filePath);
+			long quantity = tradingService.getTradingsQuantity();
+			return "Printed " + quantity + "items from " + filePath;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
 		}
 	}
 
-	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload data from csv to db", prefix = "-")
+	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload data from csv to db(-f file name)", prefix = "-")
 	public String importCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = ConsoleUtils.getCurrentDirectory() + "\\" + fileName;// TODO "\" in other OS ???
-		try {			
-			tradingService.addData(CsvUtils.getTradingSessions(filePath));
-			return "Success!";
+		String filePath = Utils.getFullPath(fileName);
+		try {
+			long quantity = tradingService.addData(Utils.getTradingSessions(filePath));
+			if (quantity > 0) {
+				return "Success! Added " + quantity + " items.";
+			} else {
+				return "Nothing to add or ulready exist.";
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
 		}
 	}
-	
-	@ShellMethod(key = "upload", value = "upload data from remote service to db", prefix = "-")
+
+	@ShellMethod(key = UPLOAD_REMOTE_COMMAND, value = "upload data from remote service to db(-n ticker name)", prefix = "-")
 	public String importFromRemote(@ShellOption(value = "n") String tickereName) {
-		
-		try {			
-			tradingService.addData(tradingService.getDataFromRemoteService(tickereName));
-			return "Success!";
+		try {
+			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(tickereName));
+			if (quantity > 0) {
+				return "Success! Added " + quantity + " items.";
+			} else {
+				return "Nothing to add or ulready exist.";
+			}
+
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
 		}
 	}
-	
+
 	@ShellMethodAvailability({ "add_user", "update_user", "delete_user" })
 	public Availability accessCheck() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
