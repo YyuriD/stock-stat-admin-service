@@ -1,5 +1,9 @@
 package telran.java51;
 
+import java.net.ConnectException;
+
+import javax.naming.CommunicationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,8 +24,9 @@ public class StockStatAdminServiceApplication  {
 	public static void main(String[] args) {
 		try {
 			SpringApplication.run(StockStatAdminServiceApplication.class, args);
-		} catch (Exception e) {
-			System.out.println("fail to start application");
+		}  		
+		catch (Exception e) {			
+		System.out.println("fail to start application");
 		}
 		
 	}
