@@ -31,7 +31,7 @@ public class Admin implements Serializable {
 	
 	@Id
 	@Length(min = 3, message = "The login must be at least 3 characters")
-    @Length(max = 30, message = "The password must be less than 10 characters")
+    @Length(max = 30, message = "The login must be less than 10 characters")
 	String login;
 	
 	@Setter

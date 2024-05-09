@@ -270,3 +270,44 @@
 1715020724562:import_csv -f AAPL.csv
 1715020867120:import_csv -f BTC-USD.csv
 1715020885593:upload_remote -n GOOG
+1715281396670:add_user -u operator4 -p 1234 -l 2
+1715281443784:add_user -u op -p 1234 -l 2
+1715282875459:add_user -u operator4 -p 1234 -l 2
+1715282920387:add_user -u op -p 1234 -l 2
+1715284981243:add_user -u operator4 -p 1234 -l 2
+1715288400104:add_user -u op -p 1234 -l 2
+1715288410375:add_user -u operator4 -p 12 -l 2
+1715289054354:add_user -u operator4 -p 1234 -l 2
+1715289072427:add_user -u op -p 1234 -l 2
+1715289105610:add_user -u operator4 -p 123 -l 2
+1715289114987:add_user -u operator4 -p 1234 -l 12
+1715289904979:add_user -u operator4 -p 1234 -l 0
+1715289975937:add_user -u operator4 -p 1234 -l 2
+1715289980848:add_user -u operator4 -p 1234 -l 0
+1715289988693:add_user -u op -p 1234 -l 2
+1715289995487:add_user -u operator4 -p 123 -l 2
+1715290261139:add_user -u operator4 -p 1234 -l
+1715290282435:add_user -u  -p 1234 -l 2
+1715293053433:add_user -u operator4 -p 1234 -l 2
+1715293064901:add_user -u operator1 -p 1234 -l
+1715293075733:add_user -u operator1 -p 1234 -l 23
+1715293343559:add_user -u operator4 -p 1234 -l 22
+1715293350873:add_user -u operator4 -p 1234 -l 2
+1715293436786:add_user -u operator4 -p 1234 -l 10
+1715293485203:add_user -u operator4 -p 1234 -l 2
+1715293512007:add_user -u operator4 -p 1234 -l2
+1715293522455:add_user -u operator4 -p 1234 -l 1
+1715293544384:add_user -u operator4 -p 1234 -l 10
+1715293635333:add_user -u operator4 -p 1234 -l 2
+1715293645048:add_user -u operator4 -p 1234 -l 11
+1715293651094:add_user -u operator4 -p 1234 -l 0
+1715293759307:add_user -u operator4 -p 1234 -l 2
+1715293783145:add_user -u operator4 -p 1234 -l 22
+1715293788618:add_user -u operator4 -p 1234 -l 0
+1715293791691:add_user -u operator4 -p 1234 -l 2
+1715293797853:add_user -u operator4 -p 1234 -l 10
+1715293806455:add_user -u op -p 1234 -l 2
+1715293816315:add_user -u operator -p 123 -l 2
+1715293826240:add_user -u operator1 -p 1234 -l 2
+1715293868613:update_user -u operator2 -p 1234 -l 1
+1715293876472:update_user -u operator1 -p 1234 -l 1

@@ -7,18 +7,11 @@ import static telran.java51.console.Constants.IMPORT_CSV_COMMAND;
 import static telran.java51.console.Constants.LOGIN_COMMAND;
 import static telran.java51.console.Constants.LOGOUT_COMMAND;
 import static telran.java51.console.Constants.LS_COMMAND;
-import static telran.java51.console.Constants.MAX_ACCESS_LEVEL;
-import static telran.java51.console.Constants.MAX_LOGIN_LENGTH;
-import static telran.java51.console.Constants.MAX_PASS_LENGTH;
-import static telran.java51.console.Constants.MIN_ACCESS_LEVEL;
-import static telran.java51.console.Constants.MIN_LOGIN_LENGTH;
-import static telran.java51.console.Constants.MIN_PASS_LENGTH;
 import static telran.java51.console.Constants.PRINT_CSV_COMMAND;
 import static telran.java51.console.Constants.UPDATE_USER_COMMAND;
 import static telran.java51.console.Constants.UPLOAD_REMOTE_COMMAND;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Set;
 
@@ -38,11 +31,7 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import telran.java51.admin.dao.AdminRepository;
-import telran.java51.admin.exceptions.UserExistsException;
-import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.service.TradingServiceImpl;
@@ -51,7 +40,8 @@ import telran.java51.utils.Utils;
 @Configuration
 @ShellComponent
 public class ConsoleCommands {
-	boolean isAuthenticated = false;
+	private boolean isAuthenticated = false;
+	private boolean isCorrectInput = false;
 
 	@Autowired
 	AdminRepository adminRepository;
@@ -84,20 +74,22 @@ public class ConsoleCommands {
 		String message = "";
 
 		do {
-			try {
-				System.out.print("Enter login: "); // TODO validation input data
-				login = br.readLine();
-				System.out.print("Enter password: ");
-				if (System.console() != null) {
-					password = new String(System.console().readPassword());
-				} else {
-					password = br.readLine();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			while (!isCorrectInput) {
+				try {
+					System.out.print("Enter login: ");
+					login = br.readLine();
+					System.out.print("Enter password: ");
+					if (System.console() != null) {
+						password = new String(System.console().readPassword());
+					} else {
+						password = br.readLine();
+					}
+					InputDataValidator.check(login, password);
+					isCorrectInput = true;
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				} 
 			}
-
 			try {
 				Authentication result = authenticationManager
 						.authenticate(new UsernamePasswordAuthenticationToken(login, password));
@@ -112,39 +104,35 @@ public class ConsoleCommands {
 	}
 
 	@ShellMethod(key = ADD_USER_COMMAND, value = "add user to admin service( -u username -p password -l access level)", prefix = "-")
-	public String addUser(
-			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login,
-			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
-			@ShellOption(value = "l") @Size(min = MIN_ACCESS_LEVEL, max = MAX_ACCESS_LEVEL) @NotEmpty String level) {
+	public String addUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
+			@ShellOption(value = "l") String level) {
 		try {
+			InputDataValidator.check(login, password, level);
 			adminService.addUser(login, password, level);
 			return "Success!";
-		} catch (UserExistsException e) {
-			return "User already exist";
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 	}
 
 	@ShellMethod(key = UPDATE_USER_COMMAND, value = "update exist user(-u username -p password -l access level)", prefix = "-")
-	public String updateUser(
-			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login,
-			@ShellOption(value = "p") @Size(min = MIN_PASS_LENGTH, max = MAX_PASS_LENGTH) @NotEmpty String password,
-			@ShellOption(value = "l") @Size(min = MIN_ACCESS_LEVEL, max = MAX_ACCESS_LEVEL) @NotEmpty String level) {
+	public String updateUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
+			@ShellOption(value = "l") String level) {
 		try {
+			InputDataValidator.check(login, password, level);
 			adminService.updateUser(login, password, level);
 			return "Success!";
-		} catch (UserNotFoundException e) {
-			return "User not found";
+		} catch (Exception e) {
+			return e.getMessage();
 		}
 	}
 
 	@ShellMethod(key = DELETE_USER_COMMAND, value = "delete user", prefix = "-")
-	public String deleteUser(
-			@ShellOption(value = "u") @Size(min = MIN_LOGIN_LENGTH, max = MAX_LOGIN_LENGTH) @NotEmpty String login) {
+	public String deleteUser(@ShellOption(value = "u") String login) {
 		try {
+			InputDataValidator.check(login);
 			adminService.deleteUser(login);
 			return "Success!";
-		} catch (UserNotFoundException e) {
-			return "User not found";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
@@ -228,7 +216,7 @@ public class ConsoleCommands {
 		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
 																								// set?
 		if (!set.contains("ROLE_" + Admin.MAX_ACCESS_LEVEL)) {
-			return Availability.unavailable("User access level must by " + MAX_ACCESS_LEVEL);
+			return Availability.unavailable("User access level must by " + Admin.MAX_ACCESS_LEVEL);
 		}
 		return Availability.available();
 	}

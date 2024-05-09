@@ -14,13 +14,6 @@ final class Constants {
 	static final String IMPORT_CSV_COMMAND = "import_csv";
 	static final String UPLOAD_REMOTE_COMMAND = "upload_remote";
 
-	static final int MIN_LOGIN_LENGTH = 4;
-	static final int MAX_LOGIN_LENGTH = 30;
-	static final int MIN_PASS_LENGTH = 4;
-	static final int MAX_PASS_LENGTH = 20;
-	static final int MIN_ACCESS_LEVEL = 1;
-	static final int MAX_ACCESS_LEVEL = 10;
-
 	//console prompt
 	static final String NOT_AUTHENTICATED = "Not authenticated";
 	static final String AUTHORIZED = "Admin-service";
