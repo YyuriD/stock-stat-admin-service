@@ -1,7 +1,7 @@
 package telran.java51.console;
 
 final class Constants {
-	static final String GREETING_MESSAGE = "\nType 'help' for help.\n";
+	static final String GREETING_MESSAGE = "\nType 'help' to see all available commands.\n";
 	
 	//console prompt
 	static final String NOT_AUTHENTICATED = "Not authenticated";

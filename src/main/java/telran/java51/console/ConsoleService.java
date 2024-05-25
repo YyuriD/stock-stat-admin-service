@@ -80,6 +80,7 @@ public class ConsoleService {
 					System.out.println(e.getMessage());
 				} 
 			}
+			isCorrectInput = false;
 			try {
 				Authentication result = authenticationManager
 						.authenticate(new UsernamePasswordAuthenticationToken(login, password));
@@ -148,7 +149,7 @@ public class ConsoleService {
 
 	@ShellMethod(key = "logout", value = "logout from admin service")
 	public String logout() {
-		isCorrectInput = false;
+		isAuthenticated = false;
 		SecurityContextHolder.getContext().setAuthentication(null);
 		return "Goodbye!\n";
 	}
@@ -215,7 +216,7 @@ public class ConsoleService {
 	}
 
 	@ShellMethodAvailability({ "add_user", "update_user", "delete_user", "print_users" })
-	public Availability accessCheck() {
+	public Availability adminAccessCheck() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			return Availability.unavailable("Must by authorized");
@@ -226,6 +227,16 @@ public class ConsoleService {
 			return Availability.unavailable("User access level must by " + Admin.MAX_ACCESS_LEVEL);
 		}
 		return Availability.available();
+	}
+	
+	@ShellMethodAvailability({ "ls", "print_csv", "import_csv", "upload_remote", "logout" })
+	public Availability userAccessCheck() {
+		return isAuthenticated ? Availability.available() : Availability.unavailable("Must by authorized");
+	}
+	
+	@ShellMethodAvailability({ "login" })
+	public Availability loginAvailability() {
+		return isAuthenticated ? Availability.unavailable("You are already logged in") : Availability.available();
 	}
 
 }
