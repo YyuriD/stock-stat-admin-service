@@ -127,7 +127,7 @@ public final class Utils {
 	}
 	
 	public static long getTimestampFromString(String dateString) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]" + "[dd-MM-yyyy]");
 		LocalDate date = LocalDate.parse(dateString, formatter);	
 		return Timestamp.valueOf(date.atTime(9, 0)).getTime()/1000;// /1000 - without milliseconds
 	}
