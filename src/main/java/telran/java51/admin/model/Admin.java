@@ -41,5 +41,12 @@ public class Admin implements Serializable {
 	@Min(value = 1, message = "The min accessLevel must be 1") 
 	@Max(value = 10, message = "The max accessLevel must be 10")
 	Integer accessLevel;
+
+	@Override
+	public String toString() {
+		return login + ","+ accessLevel;
+	}
+	
+	
 	
 }

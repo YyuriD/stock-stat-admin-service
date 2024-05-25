@@ -1,13 +1,14 @@
 package telran.java51.utils;
 
-import static telran.java51.utils.CsvHeaders.ADJ_CLOSE;
-import static telran.java51.utils.CsvHeaders.CLOSE;
-import static telran.java51.utils.CsvHeaders.DATE;
-import static telran.java51.utils.CsvHeaders.HIGH;
-import static telran.java51.utils.CsvHeaders.LOW;
-import static telran.java51.utils.CsvHeaders.OPEN;
-import static telran.java51.utils.CsvHeaders.VOLUME;
+import static telran.java51.utils.TradingTableHeaders.ADJ_CLOSE;
+import static telran.java51.utils.TradingTableHeaders.CLOSE;
+import static telran.java51.utils.TradingTableHeaders.DATE;
+import static telran.java51.utils.TradingTableHeaders.HIGH;
+import static telran.java51.utils.TradingTableHeaders.LOW;
+import static telran.java51.utils.TradingTableHeaders.OPEN;
+import static telran.java51.utils.TradingTableHeaders.VOLUME;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,37 +29,44 @@ import java.util.stream.Stream;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.shell.table.ArrayTableModel;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
+import org.springframework.shell.table.TableModel;
 
 import telran.java51.trading.model.TradingSession;
 
 public final class Utils {
 
-	public static Set<TradingSession> getTradingSessions(String text, String tickerName) {
+	public static Set<TradingSession> parseTradingSessions(String text, String tickerName) {
 		return parseCsv(new StringReader(text), tickerName);
 	}
 
-	public static Set<TradingSession> getTradingSessions(String filePath) throws FileNotFoundException {
+	public static Set<TradingSession> parseTradingSessions(String filePath) throws FileNotFoundException {
 		Path path = Paths.get(filePath);
 		String tickerName = path.getFileName().toString().split("\\.")[0];
 		return parseCsv(new FileReader(filePath), tickerName);
 	}
 
-	public static void printCsv(String filePath) throws IOException {
-		Set<TradingSession> tradingSessions = getTradingSessions(filePath);
-		System.out.println();
-		for (TradingSession tradingSession : tradingSessions) {
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.print(tradingSession.toString() + "\t");
-			System.out.println(tradingSession.toString());
-		}
+	public static long printCsv(String filePath) {
+		long count = 0;
+		try {
+			count = Files.lines(Paths.get(filePath)).count();
+			FileReader fl = new FileReader(filePath);
+			BufferedReader br = new BufferedReader(fl);
+			String[] headers = br.readLine().split(",");	
+			String[] rows = br.lines().toArray(String[] :: new);
+			br.close();
+			printTable(rows, headers);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 	
+		return  count;
 	}
 
 	public static Set<TradingSession> parseCsv(Reader csvReader, String tickerName) {
-		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(CsvHeaders.class).setSkipHeaderRecord(true)
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(TradingTableHeaders.class).setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).build();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]");
 		Set<TradingSession> tradingSessions = new HashSet<TradingSession>();
@@ -85,25 +93,35 @@ public final class Utils {
 		return tradingSessions;
 	}
 
-	public static String getFullPath(String fileName) {		
-		String fileSeparator = FileSystems.getDefault().getSeparator();		
+	public static String getFullPath(String fileName) {
+		String fileSeparator = FileSystems.getDefault().getSeparator();
 		return Utils.getCurrentDirectory() + fileSeparator + fileName;
 	}
-	
+
 	public static Set<String> getFilesList(String directory) throws IOException {
 		try (Stream<Path> stream = Files.list(Paths.get(directory))) {
 			return stream.filter(file -> !Files.isDirectory(file)).map(Path::getFileName).map(Path::toString)
 					.collect(Collectors.toSet());
 		}
 	}
-	
+
 	public static String getCurrentDirectory() {
-		String currentDirectory = Paths.get("").toAbsolutePath().toString();
-		return currentDirectory;
+		return Paths.get("").toAbsolutePath().toString();
 	}
-	
-	
+
 	public void saveTradingSessionsToCsv(String filePath) {
 		// TODO Auto-generated method stub
+	}
+
+	public static void printTable(String[] rows, String[] headers) {
+		Object[][] data = new String[rows.length + 1][headers.length];
+		data[0] = headers;
+		for (int i = 0; i < rows.length; i++) {
+			data[i+1] = rows[i].split(",");
+		}
+		TableModel model = new ArrayTableModel(data);
+		TableBuilder tableBuilder = new TableBuilder(model);
+		tableBuilder.addHeaderAndVerticalsBorders(BorderStyle.oldschool);
+		System.out.println(tableBuilder.build().render(80));
 	}
 }

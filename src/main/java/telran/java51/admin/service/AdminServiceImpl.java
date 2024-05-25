@@ -2,6 +2,8 @@ package telran.java51.admin.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +57,13 @@ public class AdminServiceImpl implements AdminService {
 		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
 		adminRepository.delete(user);
 		return user;
+	}
+
+	@Override
+	public List<Admin> getAllUsers() {
+		List<Admin> users = new ArrayList<Admin>();
+		adminRepository.findAll().forEach(a-> users.add(a));
+		return users;
 	}
 	
 }

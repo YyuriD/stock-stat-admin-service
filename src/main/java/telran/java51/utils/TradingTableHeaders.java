@@ -1,6 +1,6 @@
 package telran.java51.utils;
 
-public enum CsvHeaders {
+public enum TradingTableHeaders {
 	DATE ("Date"),
 	OPEN("Open"),
 	HIGH("High"),
@@ -8,7 +8,8 @@ public enum CsvHeaders {
 	CLOSE("Close"),
 	ADJ_CLOSE("Adj close"),
 	VOLUME("Volume");
-
-	CsvHeaders(String string) {
+	
+	TradingTableHeaders(String string) {
 	}
+	
 }

@@ -1,9 +1,6 @@
 package telran.java51.trading.service;
 
-
-
 import java.net.URI;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +25,6 @@ import telran.java51.utils.Utils;
 public class TradingServiceImpl implements TradingService {
 	final String baseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
 	final TradingRepository tradingRepository;
-	Set<TradingSession> localRepository = new HashSet<>();
 
 	@Override
 	public long addData(Set<TradingSession> tradingSessions) {
@@ -43,8 +39,8 @@ public class TradingServiceImpl implements TradingService {
 		HttpHeaders headers = new HttpHeaders();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + tickerName)
 				.queryParam("interval", "1d")
-				.queryParam("period1", "1658779200")
-				.queryParam("period2", "1659124800");
+				.queryParam("period1", "1658779200") //TODO
+				.queryParam("period2", "1659124800");//TODO
 		URI url = builder.build().toUri();
 		RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.GET, url);
 		ResponseEntity<String> response = restTemplate.exchange(request, String.class);
@@ -53,7 +49,7 @@ public class TradingServiceImpl implements TradingService {
 		if(!response.getHeaders().getContentType().equalsTypeAndSubtype(contentType)) {
 			throw new UnsupportedMediaTypeStatusException(contentType.toString());
 		}		
-		return Utils.getTradingSessions(response.getBody(), tickerName);			
+		return Utils.parseTradingSessions(response.getBody(), tickerName);			
 	}
 
 	public long getTradingsQuantity() {

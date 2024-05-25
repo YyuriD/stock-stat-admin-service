@@ -11,5 +11,7 @@ public interface AdminService {
 	Admin updateUser(String login, String password, String accessLevel);
 
 	Admin deleteUser(String login);
+	
+	Iterable<Admin> getAllUsers();
 
 }

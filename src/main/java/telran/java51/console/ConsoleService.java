@@ -1,18 +1,10 @@
 package telran.java51.console;
 
-import static telran.java51.console.Constants.ADD_USER_COMMAND;
-import static telran.java51.console.Constants.DELETE_USER_COMMAND;
 import static telran.java51.console.Constants.GREETING_MESSAGE;
-import static telran.java51.console.Constants.IMPORT_CSV_COMMAND;
-import static telran.java51.console.Constants.LOGIN_COMMAND;
-import static telran.java51.console.Constants.LOGOUT_COMMAND;
-import static telran.java51.console.Constants.LS_COMMAND;
-import static telran.java51.console.Constants.PRINT_CSV_COMMAND;
-import static telran.java51.console.Constants.UPDATE_USER_COMMAND;
-import static telran.java51.console.Constants.UPLOAD_REMOTE_COMMAND;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,44 +27,42 @@ import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.service.TradingServiceImpl;
+import telran.java51.utils.UsersTableHeaders;
 import telran.java51.utils.Utils;
 
 @Configuration
 @ShellComponent
-public class ConsoleCommands {
+public class ConsoleService {
 	private boolean isAuthenticated = false;
 	private boolean isCorrectInput = false;
-
 	@Autowired
 	AdminRepository adminRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
 	@Autowired
 	AdminServiceImpl adminService;
-
 	@Autowired
 	TradingServiceImpl tradingService;
 	@Autowired
 	AuthenticationManager authenticationManager;
-	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	@PostConstruct
 	private void greeting() {
 		System.out.println(GREETING_MESSAGE);
-		System.out.println(loginExec());
+//		System.out.println(loginExec());
 	}
 
-	@ShellMethod(key = LOGIN_COMMAND, value = "login to admin service", prefix = "-")
+	@ShellMethod(key = "login", value = "login to admin service", prefix = "-")
 	String login() {
 		return loginExec();
 	}
 
 	private String loginExec() {
+		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String login = "";
 		String password = "";
 		String message = "";
-
+		
 		do {
 			while (!isCorrectInput) {
 				try {
@@ -103,7 +93,7 @@ public class ConsoleCommands {
 		return message;
 	}
 
-	@ShellMethod(key = ADD_USER_COMMAND, value = "add user to admin service( -u username -p password -l access level)", prefix = "-")
+	@ShellMethod(key = "add_user", value = "add user to admin service( -u username -p password -l access level)", prefix = "-")
 	public String addUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
 			@ShellOption(value = "l") String level) {
 		try {
@@ -115,7 +105,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethod(key = UPDATE_USER_COMMAND, value = "update exist user(-u username -p password -l access level)", prefix = "-")
+	@ShellMethod(key = "update_user", value = "update exist user(-u username -p password -l access level)", prefix = "-")
 	public String updateUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
 			@ShellOption(value = "l") String level) {
 		try {
@@ -127,7 +117,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethod(key = DELETE_USER_COMMAND, value = "delete user", prefix = "-")
+	@ShellMethod(key = "delete_user", value = "delete user", prefix = "-")
 	public String deleteUser(@ShellOption(value = "u") String login) {
 		try {
 			InputDataValidator.check(login);
@@ -138,14 +128,32 @@ public class ConsoleCommands {
 			return "fault";
 		}
 	}
+	
+	@ShellMethod(key = "print_users", value = "print all exists users", prefix = "-")
+	public String printAllUsers() {
+		try {
+			String[] users = adminService.getAllUsers().stream()
+					.map(u-> u.toString())
+					.toArray(String[]::new);
+			String[] headers = Arrays.stream(UsersTableHeaders.values())
+					.map(h->h.toString())
+					.toArray(String[]::new);			
+			Utils.printTable(users, headers);		
+			return "Printed " + users.length + " users ";
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
 
-	@ShellMethod(key = LOGOUT_COMMAND, value = "logout from admin service")
+	@ShellMethod(key = "logout", value = "logout from admin service")
 	public String logout() {
+		isCorrectInput = false;
 		SecurityContextHolder.getContext().setAuthentication(null);
 		return "Goodbye!\n";
 	}
 
-	@ShellMethod(key = LS_COMMAND, value = "display all csv files in directory")
+	@ShellMethod(key = "ls", value = "display all csv files in directory")
 	public String showFilesInDirectory() {
 		String directory = Utils.getCurrentDirectory();
 		try {
@@ -162,12 +170,11 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethod(key = PRINT_CSV_COMMAND, value = "print data from csv", prefix = "-")
+	@ShellMethod(key = "print_csv", value = "print data from csv (-f filename)", prefix = "-")
 	public String printCsv(@ShellOption(value = "f") String fileName) {
 		String filePath = Utils.getFullPath(fileName);
-		try {
-			Utils.printCsv(filePath);
-			long quantity = tradingService.getTradingsQuantity();
+		try {		
+			long quantity = Utils.printCsv(filePath);
 			return "Printed " + quantity + "items from " + filePath;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -175,11 +182,11 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethod(key = IMPORT_CSV_COMMAND, value = "upload data from csv to db(-f file name)", prefix = "-")
+	@ShellMethod(key = "import_csv", value = "upload data from csv to db(-f file name)", prefix = "-")
 	public String importCsv(@ShellOption(value = "f") String fileName) {
 		String filePath = Utils.getFullPath(fileName);
 		try {
-			long quantity = tradingService.addData(Utils.getTradingSessions(filePath));
+			long quantity = tradingService.addData(Utils.parseTradingSessions(filePath));
 			if (quantity > 0) {
 				return "Success! Added " + quantity + " items.";
 			} else {
@@ -191,7 +198,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethod(key = UPLOAD_REMOTE_COMMAND, value = "upload data from remote service to db(-n ticker name)", prefix = "-")
+	@ShellMethod(key = "upload_remote", value = "upload data from remote service to db(-n ticker name)", prefix = "-")
 	public String importFromRemote(@ShellOption(value = "n") String tickereName) {
 		try {
 			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(tickereName));
@@ -207,7 +214,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethodAvailability({ "add_user", "update_user", "delete_user" })
+	@ShellMethodAvailability({ "add_user", "update_user", "delete_user", "print_users" })
 	public Availability accessCheck() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
