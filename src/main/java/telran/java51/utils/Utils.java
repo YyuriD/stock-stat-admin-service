@@ -20,6 +20,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -124,4 +125,11 @@ public final class Utils {
 		tableBuilder.addHeaderAndVerticalsBorders(BorderStyle.oldschool);
 		System.out.println(tableBuilder.build().render(80));
 	}
+	
+	public static long getTimestampFromString(String dateString) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]");
+		LocalDate date = LocalDate.parse(dateString, formatter);	
+		return Timestamp.valueOf(date.atTime(9, 0)).getTime()/1000;// /1000 - without milliseconds
+	}
+	
 }

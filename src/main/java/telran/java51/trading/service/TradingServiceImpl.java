@@ -34,13 +34,17 @@ public class TradingServiceImpl implements TradingService {
 	}
 
 	@Override
-	public Set<TradingSession> getDataFromRemoteService(String tickerName) {				
+	public Set<TradingSession> getDataFromRemoteService(String tickerName, String fromDate, String toDate) {				
+		String d1 = Long.toString(Utils.getTimestampFromString(fromDate));
+		String d2 = Long.toString(Utils.getTimestampFromString(toDate));
+		System.out.println("from date " + d1);
+		System.out.println("to date " + d2);
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + tickerName)
 				.queryParam("interval", "1d")
-				.queryParam("period1", "1658779200") //TODO
-				.queryParam("period2", "1659124800");//TODO
+				.queryParam("period1", d1) //TODO
+				.queryParam("period2", d2);//TODO
 		URI url = builder.build().toUri();
 		RequestEntity<String> request = new RequestEntity<>(headers, HttpMethod.GET, url);
 		ResponseEntity<String> response = restTemplate.exchange(request, String.class);

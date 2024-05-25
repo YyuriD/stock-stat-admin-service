@@ -199,10 +199,10 @@ public class ConsoleService {
 		}
 	}
 
-	@ShellMethod(key = "upload_remote", value = "upload data from remote service to db(-n ticker name)", prefix = "-")
-	public String importFromRemote(@ShellOption(value = "n") String tickereName) {
+	@ShellMethod(key = "upload_remote", value = "upload data from remote service to db(-n ticker name -f from data -t to data )", prefix = "-")
+	public String importFromRemote(@ShellOption(value = "n") String tickereName, @ShellOption(value = "f") String fromDate, @ShellOption(value = "t") String toDate) {
 		try {
-			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(tickereName));
+			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(tickereName, fromDate, toDate));
 			if (quantity > 0) {
 				return "Success! Added " + quantity + " items.";
 			} else {
