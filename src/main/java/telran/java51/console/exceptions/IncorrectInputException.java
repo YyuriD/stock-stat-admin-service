@@ -1,4 +1,4 @@
-package telran.java51.console;
+package telran.java51.console.exceptions;
 
 public class IncorrectInputException extends RuntimeException {
 

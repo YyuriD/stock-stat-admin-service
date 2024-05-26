@@ -1,5 +1,7 @@
 package telran.java51.console;
 
+import telran.java51.console.exceptions.IncorrectInputException;
+
 public class InputDataValidator {
 
 	public static void check(String login) {

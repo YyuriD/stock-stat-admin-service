@@ -1,12 +1,12 @@
 package telran.java51.utils;
 
-import static telran.java51.utils.TradingTableHeaders.ADJ_CLOSE;
-import static telran.java51.utils.TradingTableHeaders.CLOSE;
-import static telran.java51.utils.TradingTableHeaders.DATE;
-import static telran.java51.utils.TradingTableHeaders.HIGH;
-import static telran.java51.utils.TradingTableHeaders.LOW;
-import static telran.java51.utils.TradingTableHeaders.OPEN;
-import static telran.java51.utils.TradingTableHeaders.VOLUME;
+import static telran.java51.trading.model.TradingTableHeaders.ADJ_CLOSE;
+import static telran.java51.trading.model.TradingTableHeaders.CLOSE;
+import static telran.java51.trading.model.TradingTableHeaders.DATE;
+import static telran.java51.trading.model.TradingTableHeaders.HIGH;
+import static telran.java51.trading.model.TradingTableHeaders.LOW;
+import static telran.java51.trading.model.TradingTableHeaders.OPEN;
+import static telran.java51.trading.model.TradingTableHeaders.VOLUME;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -36,6 +36,7 @@ import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 
 import telran.java51.trading.model.TradingSession;
+import telran.java51.trading.model.TradingTableHeaders;
 
 public final class Utils {
 
@@ -110,10 +111,7 @@ public final class Utils {
 		return Paths.get("").toAbsolutePath().toString();
 	}
 
-	public void saveTradingSessionsToCsv(String filePath) {
-		// TODO Auto-generated method stub
-	}
-
+	
 	public static void printTable(String[] rows, String[] headers) {
 		Object[][] data = new String[rows.length + 1][headers.length];
 		data[0] = headers;
@@ -126,10 +124,10 @@ public final class Utils {
 		System.out.println(tableBuilder.build().render(80));
 	}
 	
-	public static long getTimestampFromString(String dateString) {
+	public static long getTimestampFromDateString(String dateString) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]" + "[dd-MM-yyyy]");
 		LocalDate date = LocalDate.parse(dateString, formatter);	
-		return Timestamp.valueOf(date.atTime(9, 0)).getTime()/1000;// /1000 - without milliseconds
+		return Timestamp.valueOf(date.atTime(9, 0)).getTime()/1000;// without milliseconds
 	}
 	
 }

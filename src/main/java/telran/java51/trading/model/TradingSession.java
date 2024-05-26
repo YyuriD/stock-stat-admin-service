@@ -17,7 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import telran.java51.security.TradingSessionId;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,8 +24,8 @@ import telran.java51.security.TradingSessionId;
 @Setter
 @EqualsAndHashCode(of = {"tickerName","date"})
 @Entity
-@Table(name = "trading_sessions")
 @ToString
+@Table(name = "trading_sessions")
 @IdClass(TradingSessionId.class)
 public class TradingSession  implements Serializable{
 
@@ -50,5 +49,13 @@ public class TradingSession  implements Serializable{
 	BigDecimal adjClose;
 	
 	BigInteger volume;
+
+	
+	public String toStringForTable() {
+		return date + "," + open + "," + high
+				+ "," + low + "," + close + "," + adjClose + "," + volume;
+	}
+	
+	
 	
 }

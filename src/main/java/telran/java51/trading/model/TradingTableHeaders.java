@@ -1,4 +1,4 @@
-package telran.java51.utils;
+package telran.java51.trading.model;
 
 public enum TradingTableHeaders {
 	DATE ("Date"),

@@ -25,14 +25,15 @@ import org.springframework.shell.standard.ShellOption;
 import jakarta.annotation.PostConstruct;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.model.Admin;
+import telran.java51.admin.model.AdminsTableHeaders;
 import telran.java51.admin.service.AdminServiceImpl;
+import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
-import telran.java51.utils.UsersTableHeaders;
 import telran.java51.utils.Utils;
 
 @Configuration
 @ShellComponent
-public class ConsoleService {
+public class ConsoleCommands {
 	private boolean isAuthenticated = false;
 	private boolean isCorrectInput = false;
 	@Autowired
@@ -52,7 +53,7 @@ public class ConsoleService {
 //		System.out.println(loginExec());
 	}
 
-	@ShellMethod(key = "login", value = "login to admin service", prefix = "-")
+	@ShellMethod(key = "login", value = "login to admin service")
 	String login() {
 		return loginExec();
 	}
@@ -94,35 +95,39 @@ public class ConsoleService {
 		return message;
 	}
 
-	@ShellMethod(key = "add_user", value = "add user to admin service( -u username -p password -l access level)", prefix = "-")
-	public String addUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
-			@ShellOption(value = "l") String level) {
+	@ShellMethod(key = "add_user", value = "add user to admin service")
+	public String addUser(
+			@ShellOption(help = "user name") String u, 
+			@ShellOption(help = "user password") String p,
+			@ShellOption(help = "user access level") String l) {
 		try {
-			InputDataValidator.check(login, password, level);
-			adminService.addUser(login, password, level);
+			InputDataValidator.check(u, p, l);
+			adminService.addUser(u, p, l);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
 		}
 	}
 
-	@ShellMethod(key = "update_user", value = "update exist user(-u username -p password -l access level)", prefix = "-")
-	public String updateUser(@ShellOption(value = "u") String login, @ShellOption(value = "p") String password,
-			@ShellOption(value = "l") String level) {
+	@ShellMethod(key = "update_user", value = "update exist user")
+	public String updateUser(
+			@ShellOption(help = "user name") String u, 
+			@ShellOption(help = "user password") String p,
+			@ShellOption(help = "user access level") String l) {
 		try {
-			InputDataValidator.check(login, password, level);
-			adminService.updateUser(login, password, level);
+			InputDataValidator.check(u, p, l);
+			adminService.updateUser(u, p, l);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
 		}
 	}
 
-	@ShellMethod(key = "delete_user", value = "delete user", prefix = "-")
-	public String deleteUser(@ShellOption(value = "u") String login) {
+	@ShellMethod(key = "delete_user", value = "delete user")
+	public String deleteUser(@ShellOption(help = "user name") String u) {
 		try {
-			InputDataValidator.check(login);
-			adminService.deleteUser(login);
+			InputDataValidator.check(u);
+			adminService.deleteUser(u);
 			return "Success!";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -130,13 +135,24 @@ public class ConsoleService {
 		}
 	}
 	
-	@ShellMethod(key = "print_users", value = "print all exists users", prefix = "-")
+	@ShellMethod(key = "find_user", value = "find user")
+	public String findUser(@ShellOption(help = "user name") String u) {
+		try {
+			InputDataValidator.check(u);		
+			return adminService.findByName(u).toString();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
+	
+	@ShellMethod(key = "print_users", value = "print all exists users")
 	public String printAllUsers() {
 		try {
 			String[] users = adminService.getAllUsers().stream()
-					.map(u-> u.toString())
+					.map(u-> u.toStringForTable())
 					.toArray(String[]::new);
-			String[] headers = Arrays.stream(UsersTableHeaders.values())
+			String[] headers = Arrays.stream(AdminsTableHeaders.values())
 					.map(h->h.toString())
 					.toArray(String[]::new);			
 			Utils.printTable(users, headers);		
@@ -171,9 +187,9 @@ public class ConsoleService {
 		}
 	}
 
-	@ShellMethod(key = "print_csv", value = "print data from csv (-f filename)", prefix = "-")
-	public String printCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = Utils.getFullPath(fileName);
+	@ShellMethod(key = "print_from_csv", value = "print data from csv")
+	public String printFromCsv(@ShellOption(help = "file name") String f) {
+		String filePath = Utils.getFullPath(f);
 		try {		
 			long quantity = Utils.printCsv(filePath);
 			return "Printed " + quantity + "items from " + filePath;
@@ -183,9 +199,9 @@ public class ConsoleService {
 		}
 	}
 
-	@ShellMethod(key = "import_csv", value = "upload data from csv to db(-f file name)", prefix = "-")
-	public String importCsv(@ShellOption(value = "f") String fileName) {
-		String filePath = Utils.getFullPath(fileName);
+	@ShellMethod(key = "upload_from_csv", value = "upload data from csv to db")
+	public String uploadFromCsv(@ShellOption(help = "file name") String f) {
+		String filePath = Utils.getFullPath(f);
 		try {
 			long quantity = tradingService.addData(Utils.parseTradingSessions(filePath));
 			if (quantity > 0) {
@@ -199,12 +215,15 @@ public class ConsoleService {
 		}
 	}
 
-	@ShellMethod(key = "upload_remote", value = "upload data from remote service to db(-n ticker name -f from data -t to data )", prefix = "-")
-	public String importFromRemote(@ShellOption(value = "n") String tickereName, @ShellOption(value = "f") String fromDate, @ShellOption(value = "t") String toDate) {
+	@ShellMethod(key = "upload_from_server", value = "upload data from remote server to db")
+	public String uploadFromServer(
+			@ShellOption(help = "ticker name") String n, 
+			@ShellOption(help = "from date") String fd, 
+			@ShellOption(help = "to date") String td) {
 		try {
-			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(tickereName, fromDate, toDate));
+			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(n, fd, td));
 			if (quantity > 0) {
-				return "Success! Added " + quantity + " items.";
+				return "Success! Added " + quantity + " items from date "+ fd + " to date" + td;
 			} else {
 				return "Nothing to add or ulready exist.";
 			}
@@ -214,9 +233,54 @@ public class ConsoleService {
 			return "fault";
 		}
 	}
+	
+	@ShellMethod(key = "print_from_server", value = "print trading sessions from remote server") //TODO
+	public String printFromServer(
+			@ShellOption(help = "ticker name") String n, 
+			@ShellOption(help = "from date") String fd, 
+			@ShellOption(help = "to date") String td) {
+		try {
+			String[] tradingSessions = tradingService
+					.getDataFromRemoteService(n, fd, td).stream()
+					.map(t-> t.toStringForTable())
+					.toArray(String[]::new);
+			String[] headers = Arrays.stream(TradingTableHeaders.values())
+					.map(h->h.toString())
+					.toArray(String[]::new);			
+			Utils.printTable(tradingSessions, headers);		
+			return "Printed " + tradingSessions.length + " trading sessions of " + n + " stock";
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
+	
+	@ShellMethod(key = "delete_tickers_by_name", value = "delete tickers by name from db")
+	public String deleteByTicker(
+			@ShellOption(help = "ticker name") String n) {
+		try {
+			tradingService.removeByTickerName(n);
+				
+			return "Success!";	
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
+	
+	@ShellMethod(key = "delete_all_data", value = "delete all data ")
+	public String deleteAllData() {
+		try {
+			tradingService.removeAll();			
+			return "Success!";	
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return "fault";
+		}
+	}
 
-	@ShellMethodAvailability({ "add_user", "update_user", "delete_user", "print_users" })
-	public Availability adminAccessCheck() {
+	@ShellMethodAvailability({ "add_user", "update_user", "delete_user", "print_users", "find_user"})
+	public Availability adminAvailability() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
 			return Availability.unavailable("Must by authorized");
@@ -229,8 +293,11 @@ public class ConsoleService {
 		return Availability.available();
 	}
 	
-	@ShellMethodAvailability({ "ls", "print_csv", "import_csv", "upload_remote", "logout" })
-	public Availability userAccessCheck() {
+	@ShellMethodAvailability({ "ls", "print_from_csv"
+		, "upload_from_csv", "print_from_server"
+		, "upload_from_server", "logout" 
+		, "delete_tickers_by_name", "delete_all_data"})
+	public Availability userAvailability() {
 		return isAuthenticated ? Availability.available() : Availability.unavailable("Must by authorized");
 	}
 	

@@ -1,4 +1,4 @@
-package telran.java51.security;
+package telran.java51.trading.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;

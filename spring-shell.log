@@ -373,3 +373,43 @@
 1716659565464:upload_remote -n GOOG  -f 24/05/2024 -t 25/05/2024
 1716659702061:login
 1716659720058:upload_remote -n GOOG  -f 24/05/2024 -t 25/05/2024
+1716732758667:help
+1716732763756:login
+1716732795704:upload_remote -n GOOG  -f 24/05/2024 -t 25/05/2024
+1716732809639:upload_remote -n GOOG  -f 24/05/2023 -t 25/05/2024
+1716732841937:upload_remote -n GOOG  -f 24/05/2024 -t 25/05/2024
+1716732857489:upload_remote -n GOOG  -f 24/05/2023 -t 25/05/2024
+1716732918447:upload_remote -n AAPL  -f 24/05/2023 -t 25/05/2024
+1716733621652:help upload_remote
+1716734744838:help import_csv
+1716735898882:login
+1716736005603:upload_remote --n GOOG  --fd 07-07-2020 --td 08-07-2020
+1716738010929:login
+1716738051156:print_from_remote --name GOOG  --fd 24/05/2024 --td 25/05/2024
+1716738122092:print_from_remote --n GOOG  --fd 24/05/2024 --td 25/05/2024
+1716738455443:login
+1716738468936:print_from_remote --n GOOG  --fd 24/05/2024 --td 25/05/2024
+1716738983667:logout
+1716738988528:help
+1716739191640:login
+1716739207203:print_from_remote --n GOOG  --fd 24/05/2022 --td 25/05/2023
+1716739237407:print_from_server --n GOOG  --fd 24/05/2022 --td 25/05/2023
+1716742191432:login
+1716742230092:find_user --u admin
+1716742409308:login
+1716742423247:find_user --u admin
+1716742582209:login
+1716742595609:find_user --u admin
+1716742650363:login
+1716742668843:find_user --u admin
+1716742673017:find_user --u admi
+1716743961501:login
+1716743981210:delete_tickers --n GOOG
+1716744585849:login
+1716744597992:delete_tickers --n GOOG
+1716746656995:login
+1716746672661:delete_all_data
+1716746768241:help
+1716746791825:help upload_from_server
+1716746849224:upload_from_server --n GOOG  --fd 24/05/2022 --td 25/05/2023
+1716746902197:upload_from_server --n AAPL  --fd 24/05/2022 --td 25/05/2023

@@ -8,8 +8,10 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
-import static telran.java51.console.Constants.*;
+
 import telran.java51.admin.model.Admin;
+
+import static telran.java51.console.Constants.*;
 
 @Component
 public class ConsolePromptProviderImpl implements PromptProvider {

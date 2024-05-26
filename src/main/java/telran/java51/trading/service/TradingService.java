@@ -10,6 +10,11 @@ public interface TradingService {
 	
 	Set<TradingSession> getDataFromRemoteService(String TickerName, String fromDate, String toDate);
 
-	void downloadData(String filePath);
+	public void removeByTickerName(String TickerName);
+	
+	public void removeAll();
+	
+	public long getTradingsQuantity();
+		
 	
 }
