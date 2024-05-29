@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.service.AdminServiceImpl;
 
-
+//TODO is not working
 @SpringBootTest
 class StockStatAdminServiceApplicationTests {
 
