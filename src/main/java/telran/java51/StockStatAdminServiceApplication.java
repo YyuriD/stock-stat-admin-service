@@ -30,11 +30,10 @@ public class StockStatAdminServiceApplication  {
 	
 	@PostConstruct
 	public void init() {
-		final Integer MAX_ACCESS_LEVEL = 10;
 		System.out.println("Admin repository initialization...");
 		if (!adminRepository.existsById("admin")) {
 			String password = passwordEncoder.encode("admin");
-			Admin admin = new Admin("admin", password, MAX_ACCESS_LEVEL);
+			Admin admin = new Admin("admin", password, Admin.MAX_ACCESS_LEVEL);
 			adminRepository.save(admin);
 		}
 	}
