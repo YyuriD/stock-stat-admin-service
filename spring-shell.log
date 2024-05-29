@@ -413,3 +413,8 @@
 1716746791825:help upload_from_server
 1716746849224:upload_from_server --n GOOG  --fd 24/05/2022 --td 25/05/2023
 1716746902197:upload_from_server --n AAPL  --fd 24/05/2022 --td 25/05/2023
+1716920144797:help
+1716924782489:login
+1716924797989:help
+1716924811772:print_users
+1716926653522:help
