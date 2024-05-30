@@ -6,7 +6,7 @@ public interface AdminService {
 
 	Admin findByName(String login);
 
-	Admin addUser(String login, String password, String accessLevel);
+	Admin addUser(String login, String password, String accessLevel);//TODO change to addAdmin
 
 	Admin updateUser(String login, String password, String accessLevel);
 
