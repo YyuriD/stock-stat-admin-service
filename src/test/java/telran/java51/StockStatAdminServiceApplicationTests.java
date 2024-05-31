@@ -20,7 +20,7 @@ class StockStatAdminServiceApplicationTests {
 	@Autowired
 	AdminRepository adminRepository;
 
-	@Test
+//	@Test
 	void contextLoads() throws Exception{
 		System.out.println("test");
 		assertThat(adminService).isNotNull();

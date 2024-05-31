@@ -1,6 +1,8 @@
 package telran.java51;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -14,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import telran.java51.admin.dao.AdminRepository;
-import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
 
@@ -37,25 +38,25 @@ public class AdminServiceTest {
 		Admin admin = new Admin("admin", "1234", 10);
 		when(adminRepository.findById("admin")).thenReturn(Optional.of(admin));
 
-		Admin foundAdmin = adminService.findByName("admin");
+		Admin actualAdmin = adminService.findByName("admin");
 
-		assertThat(foundAdmin).isNotNull();
-		Assertions.assertEquals("admin", foundAdmin.getLogin());
+		assertThat(actualAdmin).isNotNull();
+		Assertions.assertEquals("admin", actualAdmin.getLogin());
+		verify(adminRepository, times(1)).findById("admin");
 	}
 	
 	@Test
 	public void testAddAdmin() {
 		Admin admin = new Admin("admin", "1234", 10);
-		when(adminRepository.existsById("admin")).thenReturn(false);
 		when(adminRepository.save(admin)).thenReturn(admin);
 
-		Admin addedAdmin = adminService.addUser("admin", "1234", "10"); 
+		Admin actualAdmin = adminService.addAdmin("admin", "1234", "10"); 
 
-		assertThat(addedAdmin).isNotNull();
-		Assertions.assertEquals(admin.getLogin(), addedAdmin.getLogin());
-		Assertions.assertEquals(admin.getPassword(), addedAdmin.getPassword());
-		Assertions.assertEquals(admin.getAccessLevel(), addedAdmin.getAccessLevel());
-		
+		assertThat(actualAdmin).isNotNull();
+		Assertions.assertEquals(admin.getLogin(), actualAdmin.getLogin());
+		Assertions.assertEquals(admin.getPassword(), actualAdmin.getPassword());
+		Assertions.assertEquals(admin.getAccessLevel(), actualAdmin.getAccessLevel());
+		verify(adminRepository, times(1)).save(admin);		
 	}
 
 }

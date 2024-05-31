@@ -102,7 +102,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user access level") String l) {
 		try {
 			InputDataValidator.check(u, p, l);
-			adminService.addUser(u, p, l);
+			adminService.addAdmin(u, p, l);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -116,7 +116,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user access level") String l) {
 		try {
 			InputDataValidator.check(u, p, l);
-			adminService.updateUser(u, p, l);
+			adminService.updateAdmin(u, p, l);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -127,7 +127,7 @@ public class ConsoleCommands {
 	public String deleteUser(@ShellOption(help = "user name") String u) {
 		try {
 			InputDataValidator.check(u);
-			adminService.deleteUser(u);
+			adminService.deleteAdmin(u);
 			return "Success!";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -149,7 +149,7 @@ public class ConsoleCommands {
 	@ShellMethod(key = "print_users", value = "print all exists users")
 	public String printAllUsers() {
 		try {
-			String[] users = adminService.getAllUsers().stream()
+			String[] users = adminService.getAllAdmins().stream()
 					.map(u-> u.toStringForTable())
 					.toArray(String[]::new);
 			String[] headers = Arrays.stream(AdminsTableHeaders.values())

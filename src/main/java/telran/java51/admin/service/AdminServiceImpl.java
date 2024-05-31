@@ -34,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin addUser(String login, String password, String accessLevel) {
+	public Admin addAdmin(String login, String password, String accessLevel) {
 		if (adminRepository.existsById(login)) {
 			throw new UserExistsException("User already exist");
 		}
@@ -44,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin updateUser(String login, String password, String accessLevel) {
+	public Admin updateAdmin(String login, String password, String accessLevel) {
 		Admin user = adminRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
@@ -53,14 +53,14 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin deleteUser(String login) {
+	public Admin deleteAdmin(String login) {
 		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
 		adminRepository.delete(user);
 		return user;
 	}
 
 	@Override
-	public List<Admin> getAllUsers() {
+	public List<Admin> getAllAdmins() {
 		List<Admin> users = new ArrayList<Admin>();
 		adminRepository.findAll().forEach(a-> users.add(a));
 		return users;

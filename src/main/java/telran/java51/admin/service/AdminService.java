@@ -6,12 +6,12 @@ public interface AdminService {
 
 	Admin findByName(String login);
 
-	Admin addUser(String login, String password, String accessLevel);//TODO change to addAdmin
+	Admin addAdmin(String login, String password, String accessLevel);//TODO change to addAdmin
 
-	Admin updateUser(String login, String password, String accessLevel);
+	Admin updateAdmin(String login, String password, String accessLevel);
 
-	Admin deleteUser(String login);
+	Admin deleteAdmin(String login);
 	
-	Iterable<Admin> getAllUsers();
+	Iterable<Admin> getAllAdmins();
 
 }
