@@ -16,6 +16,7 @@ import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
+import telran.java51.admin.model.Role;
 
 @Service
 @AllArgsConstructor
@@ -34,21 +35,21 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public Admin addAdmin(String login, String password, String accessLevel) {
+	public Admin addAdmin(String login, String password) {
 		if (adminRepository.existsById(login)) {
 			throw new UserExistsException("User already exist");
 		}
 		password = passwordEncoder.encode(password);
-		Admin user = new Admin(login, password, Integer.parseInt(accessLevel));
+		Admin user = new Admin(login, password);
 		return adminRepository.save(user);
 	}
 
 	@Override
-	public Admin updateAdmin(String login, String password, String accessLevel) {
+	public Admin updateAdmin(String login, String password, Role role) {
 		Admin user = adminRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
-		user.setAccessLevel(Integer.parseInt(accessLevel));
+		user.addRole(role);
 		return adminRepository.save(user);
 	}
 

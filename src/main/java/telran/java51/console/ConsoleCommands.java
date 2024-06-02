@@ -99,9 +99,9 @@ public class ConsoleCommands {
 	public String addUser(
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user password") String p,
-			@ShellOption(help = "user access level") String l) {
+			@ShellOption(help = "user access level") String r) {
 		try {
-			InputDataValidator.check(u, p, l);
+			InputDataValidator.check(u, p, r);
 			adminService.addAdmin(u, p, l);
 			return "Success!";
 		} catch (Exception e) {
