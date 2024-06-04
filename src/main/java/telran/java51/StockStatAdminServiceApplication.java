@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.annotation.PostConstruct;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.model.Admin;
-import telran.java51.admin.model.Role;
+import telran.java51.admin.model.AdminRole;
 
 @SpringBootApplication
 public class StockStatAdminServiceApplication  {
@@ -35,7 +35,7 @@ public class StockStatAdminServiceApplication  {
 		if (!adminRepository.existsById("admin")) {
 			String password = passwordEncoder.encode("admin");
 			Admin admin = new Admin("admin", password);
-			admin.addRole(Role.SUPER_ADMIN);
+			admin.addRole(AdminRole.SUPER_ADMIN);
 			adminRepository.save(admin);
 		}
 	}

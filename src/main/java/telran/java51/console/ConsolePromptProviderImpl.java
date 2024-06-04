@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import telran.java51.admin.model.Role;
+import telran.java51.admin.model.AdminRole;
 
 @Component
 public class ConsolePromptProviderImpl implements PromptProvider {
@@ -27,7 +27,7 @@ public class ConsolePromptProviderImpl implements PromptProvider {
 		if (authentication != null) {
 			String userName = authentication.getName();
 			Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-			if (set.contains(Role.SUPER_ADMIN.name())) {
+			if (set.contains(AdminRole.SUPER_ADMIN.name())) {
 				prompt = promptBuilder(ADMIN_SIGN, userName);
 			} else {
 				prompt = promptBuilder(USER_SIGN, userName);

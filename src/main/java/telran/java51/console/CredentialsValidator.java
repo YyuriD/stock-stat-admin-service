@@ -1,9 +1,9 @@
 package telran.java51.console;
 
-import telran.java51.admin.model.Role;
+import telran.java51.admin.model.AdminRole;
 import telran.java51.console.exceptions.IncorrectInputException;
 
-public class InputDataValidator {
+public class CredentialsValidator {
 
 	public static void check(String login) {
 		if (!login.matches("^\\w{3,30}$") || login == null) {
@@ -20,7 +20,7 @@ public class InputDataValidator {
 
 	public static void check(String login, String password, String role) {
 		check(login, password);
-		for(Role r : Role.values()) {
+		for(AdminRole r : AdminRole.values()) {
 			if (r.name().equals(role)) {
 				return;
 			}

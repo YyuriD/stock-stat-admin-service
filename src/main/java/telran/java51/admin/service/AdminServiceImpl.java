@@ -10,13 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.exceptions.UserNotFoundException;
 import telran.java51.admin.model.Admin;
-import telran.java51.admin.model.Role;
+import telran.java51.admin.model.AdminRole;
 
 @Service
 @AllArgsConstructor
@@ -29,11 +30,13 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	AuthenticationManager authenticationManager;
 
+	@Transactional(readOnly = true)
 	@Override
 	public Admin findByName(String login) {
 		return adminRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
 
+	@Transactional
 	@Override
 	public Admin addAdmin(String login, String password) {
 		if (adminRepository.existsById(login)) {
@@ -44,8 +47,9 @@ public class AdminServiceImpl implements AdminService {
 		return adminRepository.save(user);
 	}
 
+	@Transactional
 	@Override
-	public Admin updateAdmin(String login, String password, Role role) {
+	public Admin updateAdmin(String login, String password, AdminRole role) {
 		Admin user = adminRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
@@ -53,6 +57,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminRepository.save(user);
 	}
 
+	@Transactional
 	@Override
 	public Admin deleteAdmin(String login) {
 		Admin user = adminRepository.findById(login).orElseThrow(UserNotFoundException::new);
@@ -60,6 +65,7 @@ public class AdminServiceImpl implements AdminService {
 		return user;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<Admin> getAllAdmins() {
 		List<Admin> users = new ArrayList<Admin>();

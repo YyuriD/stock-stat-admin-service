@@ -25,7 +25,7 @@ import org.springframework.shell.standard.ShellOption;
 import jakarta.annotation.PostConstruct;
 import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.model.AdminsTableHeaders;
-import telran.java51.admin.model.Role;
+import telran.java51.admin.model.AdminRole;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
@@ -75,7 +75,7 @@ public class ConsoleCommands {
 					} else {
 						password = br.readLine();
 					}
-					InputDataValidator.check(login, password);
+					CredentialsValidator.check(login, password);
 					isCorrectInput = true;
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -89,6 +89,7 @@ public class ConsoleCommands {
 				isAuthenticated = true;
 				message = "Welcome to admin service!";
 			} catch (AuthenticationException e) {
+				System.out.println(e.getMessage());
 				System.out.println("Authentication failed");
 			}
 		} while (!isAuthenticated);
@@ -100,7 +101,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user password") String p) {
 		try {
-			InputDataValidator.check(u, p);
+			CredentialsValidator.check(u, p);
 			adminService.addAdmin(u, p);
 			return "Success!";
 		} catch (Exception e) {
@@ -112,11 +113,10 @@ public class ConsoleCommands {
 	public String updateUser(
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user password") String p,
-			@ShellOption(help = "user access level") String r) {
+			@ShellOption(help = "user role") String r) {
 		try {
-			InputDataValidator.check(u, p, r);
-			System.out.println(Role.valueOf(r).toString());  //TODO
-			adminService.updateAdmin(u, p, Role.valueOf(r));
+			CredentialsValidator.check(u, p, r);
+			adminService.updateAdmin(u, p, AdminRole.valueOf(r.toUpperCase()));
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -126,7 +126,7 @@ public class ConsoleCommands {
 	@ShellMethod(key = "delete_user", value = "delete user")
 	public String deleteUser(@ShellOption(help = "user name") String u) {
 		try {
-			InputDataValidator.check(u);
+			CredentialsValidator.check(u);
 			adminService.deleteAdmin(u);
 			return "Success!";
 		} catch (Exception e) {
@@ -138,7 +138,7 @@ public class ConsoleCommands {
 	@ShellMethod(key = "find_user", value = "find user")
 	public String findUser(@ShellOption(help = "user name") String u) {
 		try {
-			InputDataValidator.check(u);		
+			CredentialsValidator.check(u);		
 			return adminService.findByName(u).toString();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -287,8 +287,8 @@ public class ConsoleCommands {
 		}
 		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
 																								// set?
-		if (!set.contains(Role.SUPER_ADMIN.name())) {
-			return Availability.unavailable("User role must by " + Role.SUPER_ADMIN.name());
+		if (!set.contains("ROLE_" + AdminRole.SUPER_ADMIN.name())) {
+			return Availability.unavailable("User role must by " + AdminRole.SUPER_ADMIN.name());
 		}
 		return Availability.available();
 	}
