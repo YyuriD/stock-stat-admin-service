@@ -24,8 +24,8 @@ import org.springframework.shell.standard.ShellOption;
 
 import jakarta.annotation.PostConstruct;
 import telran.java51.admin.dao.AdminRepository;
-import telran.java51.admin.model.Admin;
 import telran.java51.admin.model.AdminsTableHeaders;
+import telran.java51.admin.model.Role;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
@@ -98,11 +98,10 @@ public class ConsoleCommands {
 	@ShellMethod(key = "add_user", value = "add user to admin service")
 	public String addUser(
 			@ShellOption(help = "user name") String u, 
-			@ShellOption(help = "user password") String p,
-			@ShellOption(help = "user access level") String r) {
+			@ShellOption(help = "user password") String p) {
 		try {
-			InputDataValidator.check(u, p, r);
-			adminService.addAdmin(u, p, l);
+			InputDataValidator.check(u, p);
+			adminService.addAdmin(u, p);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -113,10 +112,11 @@ public class ConsoleCommands {
 	public String updateUser(
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user password") String p,
-			@ShellOption(help = "user access level") String l) {
+			@ShellOption(help = "user access level") String r) {
 		try {
-			InputDataValidator.check(u, p, l);
-			adminService.updateAdmin(u, p, l);
+			InputDataValidator.check(u, p, r);
+			System.out.println(Role.valueOf(r).toString());  //TODO
+			adminService.updateAdmin(u, p, Role.valueOf(r));
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -287,8 +287,8 @@ public class ConsoleCommands {
 		}
 		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
 																								// set?
-		if (!set.contains("ROLE_" + Admin.MAX_ACCESS_LEVEL)) {
-			return Availability.unavailable("User access level must by " + Admin.MAX_ACCESS_LEVEL);
+		if (!set.contains(Role.SUPER_ADMIN.name())) {
+			return Availability.unavailable("User role must by " + Role.SUPER_ADMIN.name());
 		}
 		return Availability.available();
 	}

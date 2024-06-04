@@ -33,7 +33,7 @@ public class Admin implements Serializable {
 	
 	
 	@Id
-	@Length(min = 6, message = "The email must be at least 6 symbols")
+	@Length(min = 3, message = "The email must be at least 6 symbols")
     @Length(max = 40, message = "The login must be less than 40 symbols")
 	String login;
 	

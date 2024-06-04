@@ -1,5 +1,6 @@
 package telran.java51.console;
 
+import telran.java51.admin.model.Role;
 import telran.java51.console.exceptions.IncorrectInputException;
 
 public class InputDataValidator {
@@ -17,10 +18,13 @@ public class InputDataValidator {
 		}
 	}
 
-	public static void check(String login, String password, String accessLevel) {
+	public static void check(String login, String password, String role) {
 		check(login, password);
-		if (!accessLevel.matches("^[1-9]|10$") || accessLevel == null) {
-			throw new IncorrectInputException("Incorrect access level");
+		for(Role r : Role.values()) {
+			if (r.name().equals(role)) {
+				return;
+			}
 		}
+		throw new IncorrectInputException("Incorrect role");	
 	}
 }

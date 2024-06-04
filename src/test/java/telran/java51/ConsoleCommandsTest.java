@@ -25,7 +25,7 @@ public class ConsoleCommandsTest {
 	
 	@Test
 	void testAddUser() {
-		String result = consoleCommands.addUser("admin", "admin", "10");	
+		String result = consoleCommands.addUser("admin", "admin");	
 		Assertions.assertEquals("Success!",result);
 	}
 }

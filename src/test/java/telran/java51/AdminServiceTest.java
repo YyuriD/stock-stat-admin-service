@@ -35,7 +35,7 @@ public class AdminServiceTest {
 
 	@Test
 	public void testFindByName() {
-		Admin admin = new Admin("admin", "1234", 10);
+		Admin admin = new Admin("admin", "1234");
 		when(adminRepository.findById("admin")).thenReturn(Optional.of(admin));
 
 		Admin actualAdmin = adminService.findByName("admin");
@@ -47,15 +47,15 @@ public class AdminServiceTest {
 	
 	@Test
 	public void testAddAdmin() {
-		Admin admin = new Admin("admin", "1234", 10);
+		Admin admin = new Admin("admin", "1234");
 		when(adminRepository.save(admin)).thenReturn(admin);
 
-		Admin actualAdmin = adminService.addAdmin("admin", "1234", "10"); 
+		Admin actualAdmin = adminService.addAdmin("admin", "1234"); 
 
 		assertThat(actualAdmin).isNotNull();
 		Assertions.assertEquals(admin.getLogin(), actualAdmin.getLogin());
 		Assertions.assertEquals(admin.getPassword(), actualAdmin.getPassword());
-		Assertions.assertEquals(admin.getAccessLevel(), actualAdmin.getAccessLevel());
+		Assertions.assertEquals(admin.getRoles(), actualAdmin.getRoles());
 		verify(adminRepository, times(1)).save(admin);		
 	}
 
