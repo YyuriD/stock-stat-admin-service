@@ -23,12 +23,12 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 import jakarta.annotation.PostConstruct;
-import telran.java51.admin.dao.AdminRepository;
-import telran.java51.admin.model.AdminsTableHeaders;
-import telran.java51.admin.model.AdminRole;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
+import telran.java51.user.dao.UserRepository;
+import telran.java51.user.model.AdminRole;
+import telran.java51.user.model.AdminsTableHeaders;
 import telran.java51.utils.Utils;
 
 @Configuration
@@ -37,7 +37,7 @@ public class ConsoleCommands {
 	private boolean isAuthenticated = false;
 	private boolean isCorrectInput = false;
 	@Autowired
-	AdminRepository adminRepository;
+	UserRepository adminRepository;
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	@Autowired

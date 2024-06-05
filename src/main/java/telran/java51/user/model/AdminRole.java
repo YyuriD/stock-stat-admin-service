@@ -1,4 +1,4 @@
-package telran.java51.admin.model;
+package telran.java51.user.model;
 
 public enum AdminRole {
 	SUPER_ADMIN,

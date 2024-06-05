@@ -15,16 +15,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import telran.java51.admin.dao.AdminRepository;
-import telran.java51.admin.model.Admin;
 import telran.java51.admin.service.AdminServiceImpl;
+import telran.java51.user.dao.UserRepository;
+import telran.java51.user.model.AdminAccount;
 
 public class AdminServiceTest {
 
 	@InjectMocks
 	AdminServiceImpl adminService;
 	@Mock
-	AdminRepository adminRepository;
+	UserRepository adminRepository;
 	@Mock
 	PasswordEncoder passwordEncoder;
 
@@ -35,10 +35,10 @@ public class AdminServiceTest {
 
 	@Test
 	public void testFindByName() {
-		Admin admin = new Admin("admin", "1234");
+		AdminAccount admin = new AdminAccount("admin", "1234");
 		when(adminRepository.findById("admin")).thenReturn(Optional.of(admin));
 
-		Admin actualAdmin = adminService.findByName("admin");
+		AdminAccount actualAdmin = adminService.findByName("admin");
 
 		assertThat(actualAdmin).isNotNull();
 		Assertions.assertEquals("admin", actualAdmin.getLogin());
@@ -47,10 +47,10 @@ public class AdminServiceTest {
 	
 	@Test
 	public void testAddAdmin() {
-		Admin admin = new Admin("admin", "1234");
+		AdminAccount admin = new AdminAccount("admin", "1234");
 		when(adminRepository.save(admin)).thenReturn(admin);
 
-		Admin actualAdmin = adminService.addAdmin("admin", "1234"); 
+		AdminAccount actualAdmin = adminService.addAdmin("admin", "1234"); 
 
 		assertThat(actualAdmin).isNotNull();
 		Assertions.assertEquals(admin.getLogin(), actualAdmin.getLogin());

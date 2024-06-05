@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import telran.java51.admin.dao.AdminRepository;
 import telran.java51.admin.service.AdminServiceImpl;
+import telran.java51.user.dao.UserRepository;
 
 //TODO is not working
 @SpringBootTest
@@ -18,7 +18,7 @@ class StockStatAdminServiceApplicationTests {
 	AdminServiceImpl adminService;
 
 	@Autowired
-	AdminRepository adminRepository;
+	UserRepository adminRepository;
 
 //	@Test
 	void contextLoads() throws Exception{

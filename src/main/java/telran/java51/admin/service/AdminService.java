@@ -1,18 +1,18 @@
 package telran.java51.admin.service;
 
-import telran.java51.admin.model.Admin;
-import telran.java51.admin.model.AdminRole;
+import telran.java51.user.model.AdminAccount;
+import telran.java51.user.model.AdminRole;
 
 public interface AdminService {
 
-	Admin findByName(String login);
+	AdminAccount findByName(String login);
 
-	Admin addAdmin(String login, String password);
+	AdminAccount addAdmin(String login, String password);
 
-	Admin updateAdmin(String login, String password, AdminRole role);
+	AdminAccount updateAdmin(String login, String password, AdminRole role);
 
-	Admin deleteAdmin(String login);
+	AdminAccount deleteAdmin(String login);
 	
-	Iterable<Admin> getAllAdmins();
+	Iterable<AdminAccount> getAllAdmins(); 
 
 }
