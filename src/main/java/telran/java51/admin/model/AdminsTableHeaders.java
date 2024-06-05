@@ -1,4 +1,4 @@
-package telran.java51.user.model;
+package telran.java51.admin.model;
 
 public enum AdminsTableHeaders {
 	NAME,

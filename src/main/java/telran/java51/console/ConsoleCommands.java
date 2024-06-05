@@ -23,12 +23,11 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 import jakarta.annotation.PostConstruct;
+import telran.java51.admin.model.AdminRole;
+import telran.java51.admin.model.AdminsTableHeaders;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
-import telran.java51.user.dao.UserRepository;
-import telran.java51.user.model.AdminRole;
-import telran.java51.user.model.AdminsTableHeaders;
 import telran.java51.utils.Utils;
 
 @Configuration
@@ -36,8 +35,7 @@ import telran.java51.utils.Utils;
 public class ConsoleCommands {
 	private boolean isAuthenticated = false;
 	private boolean isCorrectInput = false;
-	@Autowired
-	UserRepository adminRepository;
+	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	@Autowired
@@ -122,6 +120,23 @@ public class ConsoleCommands {
 			return e.getMessage();
 		}
 	}
+	
+	@ShellMethod(key = "remove_role", value = "remove admins role")
+	public String removeAdminRole(
+			@ShellOption(help = "user name") String u, 
+			@ShellOption(help = "user role") String r) {
+		try {
+//			CredentialsValidator.check(u, p, r); //TODO
+			if(adminService.changeRolesList(u, r, false)) {
+				return "Success!";
+			}
+			else {
+				return "fault";
+			}		
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
 
 	@ShellMethod(key = "delete_user", value = "delete user")
 	public String deleteUser(@ShellOption(help = "user name") String u) {
@@ -146,8 +161,8 @@ public class ConsoleCommands {
 		}
 	}
 	
-	@ShellMethod(key = "print_users", value = "print all exists users")
-	public String printAllUsers() {
+	@ShellMethod(key = "print_admins", value = "print all exists admins")
+	public String printAllAdmins() {
 		try {
 			String[] users = adminService.getAllAdmins().stream()
 					.map(u-> u.toStringForTable())
@@ -279,7 +294,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethodAvailability({ "add_user", "update_user", "delete_user", "print_users", "find_user"})
+	@ShellMethodAvailability({ "add_user", "update_user", "remove_role", "delete_user", "print_admins", "find_user"})
 	public Availability adminAvailability() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {

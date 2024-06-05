@@ -516,3 +516,29 @@
 1717523461868:login
 1717523655344:add_user --u user1 --p 1234
 1717523662775:print_users
+1717610086675:help
+1717610105813:login
+1717610938567:find_user --u user1
+1717610949011:find_user --u admin
+1717611067924:login
+1717611279263:help
+1717611293329:print_users
+1717611334354:add_user --u user1 --p 1234
+1717611344752:print_users
+1717611420441:update_user --u user1 --p 1234 --r CLIENT_ADMIN
+1717611432590:print_users
+1717611985487:login
+1717612003827:update_user --u user1 --p 1234 --r CLIENT_ADMIN
+1717612467601:update_user --u user1 --p 1234 --r SUPER_ADMIN
+1717612487720:delete_user --u user1
+1717614929544:login
+1717614951430:remove_role --u user1 --r CLIENT_ADMIN
+1717614967621:add_user --u user1 --p 1234
+1717615123700:login
+1717615169286:add_user --u user1 --p 1234
+1717615234365:update_user --u user1 --p 1234 --r CLIENT_ADMIN
+1717615244303:update_user --u user1 --p 1234 --r CLIENT_ADMI
+1717615257309:remove_role --u user1 --r CLIENT_ADMIN
+1717615275506:remove_role --u user1 --r DATA_ADMIN
+1717615292038:update_user --u user1 --p 1234 --r CLIENT_ADMIN
+1717615310206:remove_role --u user1 --r C_ADMIN

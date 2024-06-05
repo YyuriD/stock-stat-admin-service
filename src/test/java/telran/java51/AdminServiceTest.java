@@ -15,9 +15,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import telran.java51.admin.model.AdminAccount;
 import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.user.dao.UserRepository;
-import telran.java51.user.model.AdminAccount;
 
 public class AdminServiceTest {
 

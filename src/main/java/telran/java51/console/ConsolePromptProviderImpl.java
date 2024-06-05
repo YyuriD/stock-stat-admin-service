@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import telran.java51.user.model.AdminRole;
+import telran.java51.admin.model.AdminRole;
 
 @Component
 public class ConsolePromptProviderImpl implements PromptProvider {

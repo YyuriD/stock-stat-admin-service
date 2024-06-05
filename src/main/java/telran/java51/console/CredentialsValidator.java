@@ -1,7 +1,7 @@
 package telran.java51.console;
 
+import telran.java51.admin.model.AdminRole;
 import telran.java51.console.exceptions.IncorrectInputException;
-import telran.java51.user.model.AdminRole;
 
 public class CredentialsValidator {
 

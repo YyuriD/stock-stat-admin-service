@@ -12,16 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import telran.java51.admin.exceptions.UserExistsException;
 import telran.java51.admin.exceptions.UserNotFoundException;
+import telran.java51.admin.model.AdminAccount;
+import telran.java51.admin.model.AdminRole;
 import telran.java51.user.dao.UserRepository;
-import telran.java51.user.model.AdminAccount;
-import telran.java51.user.model.AdminRole;
 
 @Service
-@AllArgsConstructor
 @Configuration
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
@@ -35,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional(readOnly = true)
 	@Override
 	public AdminAccount findByName(String login) {
-		return  (AdminAccount) userRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
+		return  userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
 
 	@Transactional
@@ -52,13 +50,31 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional
 	@Override
 	public AdminAccount updateAdmin(String login, String password, AdminRole role) {
-		AdminAccount user = (AdminAccount) userRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
+		AdminAccount user = userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
 		user.addRole(role);
 		return userRepository.save(user);
 	}
+	
+	@Transactional
+	@Override
+	public boolean changeRolesList(String login, String role, boolean isAddRole) {
+		AdminAccount user = userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));;
+		boolean res;
+		if(isAddRole) {
+			res = user.addRole(AdminRole.valueOf(role.toUpperCase()));
+		}
+		else {
+			res = user.removeRole(role);
+		}
+		if(res) {
+			userRepository.save(user);
+		}
+		return res;
+	}
 
+	
 	@Transactional
 	@Override
 	public AdminAccount deleteAdmin(String login) {

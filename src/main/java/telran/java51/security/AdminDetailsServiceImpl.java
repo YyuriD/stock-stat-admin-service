@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import telran.java51.admin.model.AdminAccount;
 import telran.java51.user.dao.UserRepository;
-import telran.java51.user.model.AdminAccount;
 
 @Service
 @RequiredArgsConstructor

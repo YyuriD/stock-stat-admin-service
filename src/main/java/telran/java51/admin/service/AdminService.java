@@ -1,7 +1,7 @@
 package telran.java51.admin.service;
 
-import telran.java51.user.model.AdminAccount;
-import telran.java51.user.model.AdminRole;
+import telran.java51.admin.model.AdminAccount;
+import telran.java51.admin.model.AdminRole;
 
 public interface AdminService {
 
@@ -10,6 +10,8 @@ public interface AdminService {
 	AdminAccount addAdmin(String login, String password);
 
 	AdminAccount updateAdmin(String login, String password, AdminRole role);
+	
+	boolean changeRolesList(String login, String role, boolean isAddRole);
 
 	AdminAccount deleteAdmin(String login);
 	
