@@ -137,6 +137,23 @@ public class ConsoleCommands {
 			return e.getMessage();
 		}
 	}
+	
+	@ShellMethod(key = "add_role", value = "add role to admin")
+	public String addAdminRole(
+			@ShellOption(help = "user name") String u, 
+			@ShellOption(help = "user role") String r) {
+		try {
+			CredentialsValidator.checkLoginRole(u, r);
+			if(adminService.changeRolesList(u, r, true)) {
+				return "Success!";
+			}
+			else {
+				return "fault";
+			}		
+		} catch (Exception e) {
+			return e.getMessage();
+		}
+	}
 
 	@ShellMethod(key = "delete_user", value = "delete user")
 	public String deleteUser(@ShellOption(help = "user name") String u) {
@@ -161,7 +178,7 @@ public class ConsoleCommands {
 		}
 	}
 	
-	@ShellMethod(key = "print_admins", value = "print all exists admins")
+	@ShellMethod(key = "print_users", value = "print all exists admins")
 	public String printAllAdmins() {
 		try {
 			String[] users = adminService.getAllAdmins().stream()
@@ -294,7 +311,7 @@ public class ConsoleCommands {
 		}
 	}
 
-	@ShellMethodAvailability({ "add_user", "update_user", "remove_role", "delete_user", "print_admins", "find_user"})
+	@ShellMethodAvailability({ "add_user", "update_user", "remove_role", "add_role", "delete_user", "print_users", "find_user"})
 	public Availability adminAvailability() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {

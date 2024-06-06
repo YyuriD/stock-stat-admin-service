@@ -19,7 +19,7 @@ public class CredentialsValidator {
 
 	public static void checkAdminRole(String role) { // TODO pass generic enum to check different roles(admin, user, client etc.)
 		for(AdminRole r : AdminRole.values()) {
-			if (r.name().equals(role)) {
+			if (r.name().equalsIgnoreCase(role)) {
 				return;
 			}
 		}
