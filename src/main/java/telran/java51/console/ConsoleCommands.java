@@ -73,7 +73,7 @@ public class ConsoleCommands {
 					} else {
 						password = br.readLine();
 					}
-					CredentialsValidator.check(login, password);
+					CredentialsValidator.checkLoginPass(login, password);
 					isCorrectInput = true;
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
@@ -99,7 +99,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user password") String p) {
 		try {
-			CredentialsValidator.check(u, p);
+			CredentialsValidator.checkLoginPass(u, p);
 			adminService.addAdmin(u, p);
 			return "Success!";
 		} catch (Exception e) {
@@ -113,7 +113,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user password") String p,
 			@ShellOption(help = "user role") String r) {
 		try {
-			CredentialsValidator.check(u, p, r);
+			CredentialsValidator.checkLoginPassRole(u, p, r);
 			adminService.updateAdmin(u, p, AdminRole.valueOf(r.toUpperCase()));
 			return "Success!";
 		} catch (Exception e) {
@@ -126,7 +126,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user name") String u, 
 			@ShellOption(help = "user role") String r) {
 		try {
-//			CredentialsValidator.check(u, p, r); //TODO
+			CredentialsValidator.checkLoginRole(u, r);
 			if(adminService.changeRolesList(u, r, false)) {
 				return "Success!";
 			}
@@ -141,7 +141,7 @@ public class ConsoleCommands {
 	@ShellMethod(key = "delete_user", value = "delete user")
 	public String deleteUser(@ShellOption(help = "user name") String u) {
 		try {
-			CredentialsValidator.check(u);
+			CredentialsValidator.checkLogin(u);
 			adminService.deleteAdmin(u);
 			return "Success!";
 		} catch (Exception e) {
@@ -153,7 +153,7 @@ public class ConsoleCommands {
 	@ShellMethod(key = "find_user", value = "find user")
 	public String findUser(@ShellOption(help = "user name") String u) {
 		try {
-			CredentialsValidator.check(u);		
+			CredentialsValidator.checkLogin(u);		
 			return adminService.findByName(u).toString();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
