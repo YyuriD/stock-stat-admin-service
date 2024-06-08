@@ -266,7 +266,7 @@ public class ConsoleCommands {
 		}
 	}
 	
-	@ShellMethod(key = "print_from_server", value = "print trading sessions from remote server") //TODO
+	@ShellMethod(key = "print_from_server", value = "print trading sessions from remote server")
 	public String printFromServer(
 			@ShellOption(help = "ticker name") String n, 
 			@ShellOption(help = "from date") String fd, 

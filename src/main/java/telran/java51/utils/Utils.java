@@ -61,7 +61,6 @@ public final class Utils {
 			br.close();
 			printTable(rows, headers);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 	
 		return  count;
@@ -76,7 +75,6 @@ public final class Utils {
 		try {
 			csvRecords = csvFormat.parse(csvReader);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

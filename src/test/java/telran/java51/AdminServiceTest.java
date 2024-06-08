@@ -36,13 +36,13 @@ public class AdminServiceTest {
 	@Test
 	public void testFindByName() {
 		AdminAccount admin = new AdminAccount("admin", "1234");
-		when(adminRepository.findById("admin")).thenReturn(Optional.of(admin));
+		when(adminRepository.findAdminByLogin("admin")).thenReturn(Optional.of(admin));
 
 		AdminAccount actualAdmin = adminService.findByName("admin");
 
 		assertThat(actualAdmin).isNotNull();
 		Assertions.assertEquals("admin", actualAdmin.getLogin());
-		verify(adminRepository, times(1)).findById("admin");
+		verify(adminRepository, times(1)).findAdminByLogin("admin");
 	}
 	
 	@Test
