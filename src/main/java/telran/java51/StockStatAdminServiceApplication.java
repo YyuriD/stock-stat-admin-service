@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.annotation.PostConstruct;
-import telran.java51.admin.model.AdminAccount;
-import telran.java51.admin.model.AdminRole;
 import telran.java51.user.dao.UserRepository;
+import telran.java51.user.model.Role;
+import telran.java51.user.model.UserAccount;
 
 @SpringBootApplication
 public class StockStatAdminServiceApplication  {
@@ -31,12 +31,12 @@ public class StockStatAdminServiceApplication  {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println("Admin repository initialization...");
+		System.out.println("Repository initialization...");
 		if (!userRepository.existsById("admin")) {
 			String password = passwordEncoder.encode("admin");
-			AdminAccount admin = new AdminAccount("admin", password);
-			admin.addRole(AdminRole.SUPER_ADMIN);
-			userRepository.save(admin);
+			UserAccount user = new UserAccount("admin", password, "", "");
+			user.addRole(Role.ADMIN.name());
+			userRepository.save(user);
 		}
 	}
 

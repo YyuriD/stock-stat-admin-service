@@ -23,11 +23,11 @@ import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
 import jakarta.annotation.PostConstruct;
-import telran.java51.admin.model.AdminRole;
-import telran.java51.admin.model.AdminsTableHeaders;
-import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.trading.model.TradingTableHeaders;
 import telran.java51.trading.service.TradingServiceImpl;
+import telran.java51.user.model.UsersTableHeaders;
+import telran.java51.user.model.Role;
+import telran.java51.user.service.UserAccountServiceImpl;
 import telran.java51.utils.Utils;
 
 @Configuration
@@ -39,7 +39,7 @@ public class ConsoleCommands {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	@Autowired
-	AdminServiceImpl adminService;
+	UserAccountServiceImpl userAccountService;
 	@Autowired
 	TradingServiceImpl tradingService;
 	@Autowired
@@ -100,7 +100,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user password") String p) {
 		try {
 			CredentialsValidator.checkLoginPass(u, p);
-			adminService.addAdmin(u, p);
+			userAccountService.addUser(u, p);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -114,7 +114,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user role") String r) {
 		try {
 			CredentialsValidator.checkLoginPassRole(u, p, r);
-			adminService.updateAdmin(u, p, AdminRole.valueOf(r.toUpperCase()));
+			userAccountService.updateUser(u, p, r);
 			return "Success!";
 		} catch (Exception e) {
 			return e.getMessage();
@@ -127,7 +127,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user role") String r) {
 		try {
 			CredentialsValidator.checkLoginRole(u, r);
-			if(adminService.changeRolesList(u, r, false)) {
+			if(userAccountService.changeRolesList(u, r, false)) {
 				return "Success!";
 			}
 			else {
@@ -144,7 +144,7 @@ public class ConsoleCommands {
 			@ShellOption(help = "user role") String r) {
 		try {
 			CredentialsValidator.checkLoginRole(u, r);
-			if(adminService.changeRolesList(u, r, true)) {
+			if(userAccountService.changeRolesList(u, r, true)) {
 				return "Success!";
 			}
 			else {
@@ -159,7 +159,7 @@ public class ConsoleCommands {
 	public String deleteUser(@ShellOption(help = "user name") String u) {
 		try {
 			CredentialsValidator.checkLogin(u);
-			adminService.deleteAdmin(u);
+			userAccountService.removeUser(u);
 			return "Success!";
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -171,7 +171,7 @@ public class ConsoleCommands {
 	public String findUser(@ShellOption(help = "user name") String u) {
 		try {
 			CredentialsValidator.checkLogin(u);		
-			return adminService.findByName(u).toString();
+			return userAccountService.findByName(u).toString();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return "fault";
@@ -181,10 +181,10 @@ public class ConsoleCommands {
 	@ShellMethod(key = "print_users", value = "print all exists admins")
 	public String printAllAdmins() {
 		try {
-			String[] users = adminService.getAllAdmins().stream()
+			String[] users = userAccountService.getAllUsers().stream()
 					.map(u-> u.toStringForTable())
 					.toArray(String[]::new);
-			String[] headers = Arrays.stream(AdminsTableHeaders.values())
+			String[] headers = Arrays.stream(UsersTableHeaders.values())
 					.map(h->h.toString())
 					.toArray(String[]::new);			
 			Utils.printTable(users, headers);		
@@ -319,8 +319,8 @@ public class ConsoleCommands {
 		}
 		Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());// TODO not work without
 																								// set?
-		if (!set.contains("ROLE_" + AdminRole.SUPER_ADMIN.name())) {
-			return Availability.unavailable("User role must by " + AdminRole.SUPER_ADMIN.name());
+		if (!set.contains("ROLE_" + Role.ADMIN.name())) {
+			return Availability.unavailable("User role must by " + Role.ADMIN.name());
 		}
 		return Availability.available();
 	}

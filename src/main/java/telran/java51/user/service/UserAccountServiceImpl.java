@@ -1,4 +1,4 @@
-package telran.java51.admin.service;
+package telran.java51.user.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,16 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import telran.java51.admin.exceptions.UserExistsException;
-import telran.java51.admin.exceptions.UserNotFoundException;
-import telran.java51.admin.model.AdminAccount;
-import telran.java51.admin.model.AdminRole;
 import telran.java51.user.dao.UserRepository;
+import telran.java51.user.exceptions.UserExistsException;
+import telran.java51.user.exceptions.UserNotFoundException;
+import telran.java51.user.model.UserAccount;
 
 @Service
 @Configuration
 @RequiredArgsConstructor
-public class AdminServiceImpl implements AdminService {
+public class UserAccountServiceImpl implements UserAccountService {
 	final UserRepository userRepository;
 	final PasswordEncoder passwordEncoder;
 	final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -32,25 +31,25 @@ public class AdminServiceImpl implements AdminService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public AdminAccount findByName(String login) {
-		return  userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));
+	public UserAccount findByName(String login) {
+		return  userRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 	}
 
 	@Transactional
 	@Override
-	public AdminAccount addAdmin(String login, String password) {
+	public UserAccount addUser(String login, String password) {
 		if (userRepository.existsById(login)) {
 			throw new UserExistsException("User already exist");
 		}
 		password = passwordEncoder.encode(password);
-		AdminAccount user = new AdminAccount(login, password);
+		UserAccount user = new UserAccount(login, password,"","");
 		return userRepository.save(user);
 	}
 
 	@Transactional
 	@Override
-	public AdminAccount updateAdmin(String login, String password, AdminRole role) {
-		AdminAccount user = userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));
+	public UserAccount updateUser(String login, String password, String role) {
+		UserAccount user = userRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));
 		password = passwordEncoder.encode(password);
 		user.setPassword(password);
 		user.addRole(role);
@@ -60,10 +59,10 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional
 	@Override
 	public boolean changeRolesList(String login, String role, boolean isAddRole) {
-		AdminAccount user = userRepository.findAdminByLogin(login).orElseThrow(() -> new UserNotFoundException("User not found"));;
+		UserAccount user = userRepository.findById(login).orElseThrow(() -> new UserNotFoundException("User not found"));;
 		boolean res;
 		if(isAddRole) {
-			res = user.addRole(AdminRole.valueOf(role.toUpperCase()));
+			res = user.addRole(role);
 		}
 		else {
 			res = user.removeRole(role);
@@ -77,17 +76,17 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Transactional
 	@Override
-	public AdminAccount deleteAdmin(String login) {
-		AdminAccount user = (AdminAccount) userRepository.findById(login).orElseThrow(UserNotFoundException::new);
+	public UserAccount removeUser(String login) {
+		UserAccount user = userRepository.findById(login).orElseThrow(UserNotFoundException::new);
 		userRepository.delete(user);
 		return user;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<AdminAccount> getAllAdmins() {
-		List<AdminAccount> users = new ArrayList<AdminAccount>();
-		userRepository.findAllAdminsBy().forEach(a-> users.add(a));
+	public List<UserAccount> getAllUsers() {
+		List<UserAccount> users = new ArrayList<UserAccount>();
+		userRepository.findAll().forEach(u -> users.add(u));
 		return users;
 	}
 	

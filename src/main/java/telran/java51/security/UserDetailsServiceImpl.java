@@ -12,19 +12,19 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import telran.java51.admin.model.AdminAccount;
 import telran.java51.user.dao.UserRepository;
+import telran.java51.user.model.UserAccount;
 
 @Service
 @RequiredArgsConstructor
-public class AdminDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	UserRepository adminRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-		AdminAccount user = (AdminAccount) adminRepository.findById(login)
+		UserAccount user = adminRepository.findById(login)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found."));
 	
 		List<String> authorities = user.getRoles().stream()

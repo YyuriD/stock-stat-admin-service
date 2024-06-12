@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.console.ConsoleCommands;
+import telran.java51.user.service.UserAccountServiceImpl;
 
 public class ConsoleCommandsTest {
 
@@ -16,7 +16,7 @@ public class ConsoleCommandsTest {
 	ConsoleCommands consoleCommands;
 	
 	@Mock
-	AdminServiceImpl adminService;
+	UserAccountServiceImpl adminService;
 	
 	@BeforeEach
 	public void setUp() {

@@ -1,7 +1,7 @@
 package telran.java51.console;
 
-import telran.java51.admin.model.AdminRole;
 import telran.java51.console.exceptions.IncorrectInputException;
+import telran.java51.user.model.Role;
 
 public class CredentialsValidator {
 
@@ -18,7 +18,7 @@ public class CredentialsValidator {
 	}
 
 	public static void checkAdminRole(String role) { // TODO pass generic enum to check different roles(admin, user, client etc.)
-		for(AdminRole r : AdminRole.values()) {
+		for(Role r : Role.values()) {
 			if (r.name().equalsIgnoreCase(role)) {
 				return;
 			}

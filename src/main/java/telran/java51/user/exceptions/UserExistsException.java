@@ -1,4 +1,4 @@
-package telran.java51.admin.exceptions;
+package telran.java51.user.exceptions;
 
 public class UserExistsException extends RuntimeException {
 

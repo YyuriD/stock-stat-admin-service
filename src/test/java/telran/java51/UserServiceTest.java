@@ -15,16 +15,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import telran.java51.admin.model.AdminAccount;
-import telran.java51.admin.service.AdminServiceImpl;
 import telran.java51.user.dao.UserRepository;
+import telran.java51.user.model.UserAccount;
+import telran.java51.user.service.UserAccountServiceImpl;
 
-public class AdminServiceTest {
+public class UserServiceTest {
 
 	@InjectMocks
-	AdminServiceImpl adminService;
+	UserAccountServiceImpl userAccountServiceImpl;
 	@Mock
-	UserRepository adminRepository;
+	UserRepository userRepository;
 	@Mock
 	PasswordEncoder passwordEncoder;
 
@@ -35,28 +35,28 @@ public class AdminServiceTest {
 
 	@Test
 	public void testFindByName() {
-		AdminAccount admin = new AdminAccount("admin", "1234");
-		when(adminRepository.findAdminByLogin("admin")).thenReturn(Optional.of(admin));
+		UserAccount user = new UserAccount("admin", "1234", "", "");
+		when(userRepository.findById("admin")).thenReturn(Optional.of(user));
 
-		AdminAccount actualAdmin = adminService.findByName("admin");
+		UserAccount actualAdmin = userAccountServiceImpl.findByName("admin");
 
 		assertThat(actualAdmin).isNotNull();
 		Assertions.assertEquals("admin", actualAdmin.getLogin());
-		verify(adminRepository, times(1)).findAdminByLogin("admin");
+		verify(userRepository, times(1)).findById("admin");
 	}
 	
 	@Test
 	public void testAddAdmin() {
-		AdminAccount admin = new AdminAccount("admin", "1234");
-		when(adminRepository.save(admin)).thenReturn(admin);
+		UserAccount user = new UserAccount("admin", "1234", "", "");
+		when(userRepository.save(user)).thenReturn(user);
 
-		AdminAccount actualAdmin = adminService.addAdmin("admin", "1234"); 
+		UserAccount actualAdmin = userAccountServiceImpl.addUser("admin", "1234"); 
 
 		assertThat(actualAdmin).isNotNull();
-		Assertions.assertEquals(admin.getLogin(), actualAdmin.getLogin());
-		Assertions.assertEquals(admin.getPassword(), actualAdmin.getPassword());
-		Assertions.assertEquals(admin.getRoles(), actualAdmin.getRoles());
-		verify(adminRepository, times(1)).save(admin);		
+		Assertions.assertEquals(user.getLogin(), actualAdmin.getLogin());
+		Assertions.assertEquals(user.getPassword(), actualAdmin.getPassword());
+		Assertions.assertEquals(user.getRoles(), actualAdmin.getRoles());
+		verify(userRepository, times(1)).save(user);		
 	}
 
 }

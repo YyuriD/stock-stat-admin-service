@@ -1,39 +1,71 @@
 package telran.java51.user.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.hibernate.validator.constraints.Length;
-
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @EqualsAndHashCode(of = "login")
-@NoArgsConstructor
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class UserAccount implements Serializable{
-	
-	private static final long serialVersionUID = -6676524803011155408L;
+public class UserAccount implements Serializable {
 
-	public UserAccount(String login, String password) {
-		this.login = login;
-		this.password = password;
-	}
+	private static final long serialVersionUID = -3381330667151788505L;
+	
+	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "login"))
+	@Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+	
+	 public UserAccount() {
+	    	roles = new HashSet<>();
+			addRole(Role.MODERATOR.name());
+		}
+	
+	 public UserAccount( String login, String password, String firstName, String lastName ) {
+			this();
+	    	this.login = login;
+	    	this.password = password;
+			this.firstName = firstName;
+			this.lastName = lastName;
+		}
 
 	@Id
-	@Length(min = 3, message = "The login must be at least 6 symbols")
-	@Length(max = 40, message = "The login must be less than 40 symbols")
 	String login;
-	
 	@Setter
 	String password;
+	@Setter
+	 String firstName;
+	@Setter
+	String lastName;
+	
+	public boolean addRole(String role) {
+		return roles.add(Role.valueOf(role.toUpperCase()));
+	}
+
+	public boolean removeRole(String role) {
+		return roles.remove(Role.valueOf(role.toUpperCase()));
+	}
+
+	public String toStringForTable() {
+		return getLogin() + "," + roles.stream().map(r -> r.name()).collect(Collectors.joining(";"));
+	}
+	
 }

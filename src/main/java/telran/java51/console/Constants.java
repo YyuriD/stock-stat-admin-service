@@ -8,5 +8,5 @@ final class Constants {
 	static final String AUTHORIZED = "Admin-service";
 	static final String POSTFIX = ":>";
 	static final String ADMIN_SIGN = "#";
-	static final String USER_SIGN = "@";
+	static final String MODERATOR_SIGN = "@";
 }

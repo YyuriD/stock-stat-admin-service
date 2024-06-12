@@ -4,7 +4,7 @@ import static telran.java51.console.Constants.ADMIN_SIGN;
 import static telran.java51.console.Constants.AUTHORIZED;
 import static telran.java51.console.Constants.NOT_AUTHENTICATED;
 import static telran.java51.console.Constants.POSTFIX;
-import static telran.java51.console.Constants.USER_SIGN;
+import static telran.java51.console.Constants.MODERATOR_SIGN;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.shell.jline.PromptProvider;
 import org.springframework.stereotype.Component;
 
-import telran.java51.admin.model.AdminRole;
+import telran.java51.user.model.Role;
 
 @Component
 public class ConsolePromptProviderImpl implements PromptProvider {
@@ -27,10 +27,10 @@ public class ConsolePromptProviderImpl implements PromptProvider {
 		if (authentication != null) {
 			String userName = authentication.getName();
 			Set<String> set = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-			if (set.contains(AdminRole.SUPER_ADMIN.name())) {
+			if (set.contains("ROLE_" + Role.ADMIN.name())) {
 				prompt = promptBuilder(ADMIN_SIGN, userName);
 			} else {
-				prompt = promptBuilder(USER_SIGN, userName);
+				prompt = promptBuilder(MODERATOR_SIGN, userName);
 			}
 		}
 		return new AttributedString(prompt);

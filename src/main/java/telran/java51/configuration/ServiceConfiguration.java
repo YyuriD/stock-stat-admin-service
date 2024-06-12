@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import telran.java51.security.AdminDetailsServiceImpl;
+import telran.java51.security.UserDetailsServiceImpl;
 
 @Configuration
 public class ServiceConfiguration {
@@ -23,7 +23,7 @@ public class ServiceConfiguration {
 	
 	@Bean
 	UserDetailsService userDetailsService() {
-		return new AdminDetailsServiceImpl();
+		return new UserDetailsServiceImpl();
 	}
 	
 	@Bean
