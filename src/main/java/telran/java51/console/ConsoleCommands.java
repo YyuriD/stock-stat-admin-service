@@ -325,7 +325,7 @@ public class ConsoleCommands {
 		return Availability.available();
 	}
 	
-	@ShellMethodAvailability({ "ls", "print_from_csv"
+	@ShellMethodAvailability({ "ls", "print_from_csv" //TODO availability only for data-admin
 		, "upload_from_csv", "print_from_server"
 		, "upload_from_server", "logout" 
 		, "delete_tickers_by_name", "delete_all_data"})
