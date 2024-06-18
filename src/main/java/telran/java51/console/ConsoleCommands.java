@@ -232,10 +232,12 @@ public class ConsoleCommands {
 	}
 
 	@ShellMethod(key = "upload_from_csv", value = "upload data from csv to db")
-	public String uploadFromCsv(@ShellOption(help = "file name") String f) {
+	public String uploadFromCsv(
+			@ShellOption(help = "file name") String f,
+			@ShellOption(help = "source name") String s) {
 		String filePath = Utils.getFullPath(f);
 		try {
-			long quantity = tradingService.addData(Utils.parseTradingSessions(filePath));
+			long quantity = tradingService.addData(Utils.parseTradingSessions(filePath, s));
 			if (quantity > 0) {
 				return "Success! Added " + quantity + " items.";
 			} else {
@@ -250,10 +252,11 @@ public class ConsoleCommands {
 	@ShellMethod(key = "upload_from_server", value = "upload data from remote server to db")
 	public String uploadFromServer(
 			@ShellOption(help = "ticker name") String n, 
+			@ShellOption(help = "source name") String s, 
 			@ShellOption(help = "from date") String fd, 
 			@ShellOption(help = "to date") String td) {
 		try {
-			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(n, fd, td));
+			long quantity = tradingService.addData(tradingService.getDataFromRemoteService(n, fd, td, s));
 			if (quantity > 0) {
 				return "Success! Added " + quantity + " items from date "+ fd + " to date" + td;
 			} else {
@@ -269,11 +272,12 @@ public class ConsoleCommands {
 	@ShellMethod(key = "print_from_server", value = "print trading sessions from remote server")
 	public String printFromServer(
 			@ShellOption(help = "ticker name") String n, 
+			@ShellOption(help = "source name") String s,
 			@ShellOption(help = "from date") String fd, 
 			@ShellOption(help = "to date") String td) {
 		try {
 			String[] tradingSessions = tradingService
-					.getDataFromRemoteService(n, fd, td).stream()
+					.getDataFromRemoteService(n, fd, td, s).stream()
 					.map(t-> t.toStringForTable())
 					.toArray(String[]::new);
 			String[] headers = Arrays.stream(TradingTableHeaders.values())

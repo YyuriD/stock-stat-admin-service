@@ -590,3 +590,12 @@
 1718202817639:login
 1718202848123:help
 1718202872439:ls
+1718721500477:login
+1718721518528:upload_from_server --n GOOG  --fd 24/05/2022 --td 25/05/2023
+1718721749121:login
+1718721777851:upload_from_server --n AAPL  --fd 24/05/2022 --td 25/05/2023
+1718724535094:help upload_from_server
+1718724567785:login
+1718724585536:upload_from_server --n GOOG --s google --fd 24/05/2022 --td 25/05/2023
+1718724901791:login
+1718724930723:upload_from_server --n GOOG --s google --fd 24/05/2022 --td 25/06/2022

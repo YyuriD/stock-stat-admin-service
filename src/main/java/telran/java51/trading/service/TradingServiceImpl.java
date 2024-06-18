@@ -34,7 +34,7 @@ public class TradingServiceImpl implements TradingService {
 	}
 
 	@Override
-	public Set<TradingSession> getDataFromRemoteService(String tickerName, String fromDate, String toDate) {				
+	public Set<TradingSession> getDataFromRemoteService(String tickerName, String fromDate, String toDate, String source) {				
 		String fromTimestamp = Long.toString(Utils.getTimestampFromDateString(fromDate));
 		String toTimestamp = Long.toString(Utils.getTimestampFromDateString(toDate));
 		RestTemplate restTemplate = new RestTemplate();
@@ -51,7 +51,7 @@ public class TradingServiceImpl implements TradingService {
 		if(!response.getHeaders().getContentType().equalsTypeAndSubtype(contentType)) {
 			throw new UnsupportedMediaTypeStatusException(contentType.toString());
 		}		
-		return Utils.parseTradingSessions(response.getBody(), tickerName);			
+		return Utils.parseTradingSessions(response.getBody(), tickerName, source);			
 	}
 
 	public long getTradingsQuantity() {

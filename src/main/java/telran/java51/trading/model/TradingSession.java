@@ -34,6 +34,8 @@ public class TradingSession  implements Serializable{
 	@Id
 	String tickerName;
 	
+	String source;
+	
 	@Id	
 	@Temporal(TemporalType.DATE)
 	LocalDate date;
