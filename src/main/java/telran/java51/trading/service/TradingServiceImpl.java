@@ -15,7 +15,9 @@ import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.AllArgsConstructor;
+import telran.java51.trading.dao.IndexRepository;
 import telran.java51.trading.dao.TradingRepository;
+import telran.java51.trading.model.Index;
 import telran.java51.trading.model.TradingSession;
 import telran.java51.utils.Utils;
 
@@ -25,9 +27,12 @@ import telran.java51.utils.Utils;
 public class TradingServiceImpl implements TradingService {
 	final String baseUrl = "https://query1.finance.yahoo.com/v7/finance/download/";
 	final TradingRepository tradingRepository;
+	final IndexRepository indexRepository;
 
 	@Override
 	public long addData(Set<TradingSession> tradingSessions) {
+		indexRepository.save(new Index(tradingSessions.stream().findFirst().get()
+				.getSource(), tradingSessions.stream().findFirst().get().getTickerName()));
 		long prevQuantity = tradingRepository.count();
 		tradingRepository.saveAll(tradingSessions);
 		return tradingRepository.count() - prevQuantity;

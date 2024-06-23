@@ -599,3 +599,25 @@
 1718724585536:upload_from_server --n GOOG --s google --fd 24/05/2022 --td 25/05/2023
 1718724901791:login
 1718724930723:upload_from_server --n GOOG --s google --fd 24/05/2022 --td 25/06/2022
+1718871007201:login
+1718871147096:help
+1718871166067:ls
+1718871190269:help upload_from_csv
+1718871247059:upload_from_csv --f BTC-USD --s Bitcoin
+1718871274391:upload_from_csv --f BTC-USD.csv --s Bitcoin
+1718952118112:login
+1718952130946:help
+1718952190632:help upload_from_server
+1718952395640:upload_from_server --n ^GSPC --s SNP500 --fd 2013-12-17 --td 2022-12-31
+1719046869221:login
+1719046882456:help
+1719046900556:help upload_from_server
+1719047039226:upload_from_server --n ^GSPC --s SNP500 --fd 22/06/2023 --td 22/06/2024
+1719047225452:upload_from_server --n GC=F --s Gold --fd 22/06/2023 --td 22/06/2024
+1719047286186:upload_from_server --n AAPL --s Apple --fd 22/06/2023 --td 22/06/2024
+1719047488901:upload_from_server --n BTC-USD --s Bitcoin --fd 22/06/2023 --td 22/06/2024
+1719162554153:login
+1719162586180:help
+1719162600979:ls
+1719162627902:help upload_from_csv
+1719162693376:upload_from_csv --f GOOG.csv --s Google
