@@ -40,14 +40,14 @@ import telran.java51.trading.model.TradingTableHeaders;
 
 public final class Utils {
 
-	public static Set<TradingSession> parseTradingSessions(String text, String tickerName) {
-		return parseCsv(new StringReader(text), tickerName);
+	public static Set<TradingSession> parseTradingSessions(String text, String tickerName, String source) {
+		return parseCsv(new StringReader(text), tickerName, source);
 	}
 
-	public static Set<TradingSession> parseTradingSessions(String filePath) throws FileNotFoundException {
+	public static Set<TradingSession> parseTradingSessions(String filePath, String source) throws FileNotFoundException {
 		Path path = Paths.get(filePath);
 		String tickerName = path.getFileName().toString().split("\\.")[0];
-		return parseCsv(new FileReader(filePath), tickerName);
+		return parseCsv(new FileReader(filePath), tickerName, source);
 	}
 
 	public static long printCsv(String filePath) {
@@ -66,7 +66,7 @@ public final class Utils {
 		return  count;
 	}
 
-	public static Set<TradingSession> parseCsv(Reader csvReader, String tickerName) {
+	public static Set<TradingSession> parseCsv(Reader csvReader, String tickerName, String source) {
 		CSVFormat csvFormat = CSVFormat.DEFAULT.builder().setHeader(TradingTableHeaders.class).setSkipHeaderRecord(true)
 				.setIgnoreHeaderCase(true).build();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[dd/MM/yyyy]" + "[yyyy-MM-dd]" + "[MM/dd/yyyy]");
@@ -86,7 +86,7 @@ public final class Utils {
 			BigDecimal close = BigDecimal.valueOf(Double.parseDouble(record.get(CLOSE.name())));
 			BigDecimal adjClose = BigDecimal.valueOf(Double.parseDouble(record.get(ADJ_CLOSE.name())));
 			BigInteger volume = BigInteger.valueOf(Long.parseLong(record.get(VOLUME.name())));
-			TradingSession trading = new TradingSession(tickerName, date, open, high, low, close, adjClose, volume);
+			TradingSession trading = new TradingSession(tickerName, source, date, open, high, low, close, adjClose, volume);
 			tradingSessions.add(trading);
 		}
 		System.out.println("Read " + tradingSessions.size() + " trading sessions.");
